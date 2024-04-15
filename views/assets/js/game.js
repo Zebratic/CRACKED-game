@@ -1,66 +1,108 @@
+
+
+
+
 class Player {
     constructor() {
-        this.position = new p5.Vector(0, 0);
-        this.speed = 1;
-        this.gravity = 0.1;
-        this.width = 10;
-        this.height = 10;
-        this.isFalling = false;
-        this.acceleration = 0;
-        this.velocity = 0;
+        this.position = new p5.Vector(400, 300);
+        this.velocity = new p5.Vector(0, 0);
+        this.width = 20;
+        this.height = 20;
+        this.speed = 0.8;
+        this.jumpHeight = 3;
+        this.jumpStrength = 5;
+        this.gravity = 1;
+        this.friction = 0.9;
+        this.isOnGround = false;
     }
 
-    move() {
-        let currentPos = this.position.copy();
-        let canMove = true;
-
-        if (keyIsDown(LEFT_ARROW))  currentPos.x -= this.speed;
-        if (keyIsDown(RIGHT_ARROW)) currentPos.x += this.speed;
-
-        if (currentPos.y + this.height > height) {
-            this.isFalling = false;
-            this.acceleration = 0;
-            this.velocity = 0;
-            currentPos.y = height - this.height;
+    update() {
+        // collide with screen floor and ceiling
+        if (this.position.y + this.height > height) {
+            this.isOnGround = true;
+            this.velocity.y = 0;
+            this.position.y = height - this.height;
         }
 
-        if (this.isFalling) {
-            this.acceleration += this.gravity;
-            this.velocity += this.acceleration;
-            currentPos.y += this.velocity;
+        // collide with screen walls
+        if (this.position.x < 0) {
+            this.position.x = 0;
+        } else if (this.position.x + this.width > width) {
+            this.position.x = width - this.width;
         }
 
-        if (keyIsDown(UP_ARROW) && !this.isFalling) {
-            this.isFalling = true;
-            this.acceleration = -2;
-            this.velocity = -2;
-        }
 
+        // player controls
+        var tempvelocityX = this.velocity.x;
+        var tempvelocityY = this.velocity.y;
+        if (keyIsDown(LEFT_ARROW))
+            tempvelocityX += -this.speed;
+
+        if (keyIsDown(RIGHT_ARROW))
+            tempvelocityX += this.speed;
+
+       
+
+        // make terminal velocity but allow for some extra speed (all should depend on gravity)
+        this.velocity.x = tempvelocityX;
+        this.velocity.y = tempvelocityY;
+
+
+        let newposX = this.position.x + this.velocity.x;
+        let newposY = this.position.y + this.velocity.y;
+
+        // check if player is colliding with walls from top or bottom or sides, and if so, move player to the edge of the wall
+        var isInAir = true;
         for (let wall of walls) {
-            if (currentPos.x < wall.x + wall.w &&
-                currentPos.x + this.width > wall.x &&
-                currentPos.y < wall.y + wall.h &&
-                currentPos.y + this.height > wall.y) {
-                canMove = false;
-            }
-
-            // if wall is below player, stop falling
-            if (currentPos.x < wall.x + wall.w &&
-                currentPos.x + this.width > wall.x &&
-                currentPos.y + this.height < wall.y + wall.h &&
-                currentPos.y + this.height > wall.y) {
-                this.isFalling = false;
-                this.acceleration = 0;
-                this.velocity = 0;
-                currentPos.y = wall.y - this.height;
-                canMove = false;
+            if (newposX + this.width > wall.x && newposX < wall.x + wall.w && newposY + this.height > wall.y && newposY < wall.y + wall.h) {
+                if (newposY + this.height > wall.y && this.position.y + this.height <= wall.y) {
+                    newposY = wall.y - this.height;
+                    this.velocity.y = 0;
+                    this.isOnGround = true;
+                    isInAir = false;
+                } else if (newposY < wall.y + wall.h && this.position.y >= wall.y + wall.h) {
+                    newposY = wall.y + wall.h;
+                    this.velocity.y = 0;
+                    this.isOnGround = false;
+                    isInAir = false;
+                } else if (newposX + this.width > wall.x && this.position.x + this.width <= wall.x) {
+                    newposX = wall.x - this.width;
+                    this.velocity.x = 0;
+                } else if (newposX < wall.x + wall.w && this.position.x >= wall.x + wall.w) {
+                    newposX = wall.x + wall.w;
+                    this.velocity.x = 0;
+                }
             }
         }
 
-        // update position if allowed to move
-        if (canMove) {
-            this.position = currentPos;
+        // check floor
+        if (newposY + this.height > height) {
+            newposY = height - this.height;
+            this.velocity.y = 0;
+            this.isOnGround = true;
+            isInAir = false;
         }
+
+        // check ceiling
+        if (newposY < 0) {
+            newposY = 0;
+            this.velocity.y = 0;
+        }
+
+        // if player is in air, apply gravity
+        if (isInAir) {
+            this.velocity.y += this.gravity;
+        }
+        if (keyIsDown(UP_ARROW) && !isInAir) {
+            this.velocity.y = -(this.jumpStrength * this.jumpHeight) / this.gravity;
+        }
+
+        // slow down player so it slides a bit
+        this.velocity.x *= this.friction;
+
+        // update player
+        this.position.x = newposX;
+        this.position.y = newposY;
     }
 
     draw() {
@@ -75,43 +117,33 @@ class Wall {
         this.y = y;
         this.w = w;
         this.h = h;
+        this.collision = false;
+    }
+
+    draw() {
+        fill(255);
+        rect(this.x, this.y, this.w, this.h);
     }
 }
 
 
-function random(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-
-
-let player = new Player();
 let walls = [];
-
-// make random walls
-for (let i = 0; i < 10; i++) {
-    walls.push(new Wall(random(0, 800), random(0, 600), random(10, 100), random(10, 100)));
-}
-
-
+let player = new Player();
 
 function setup() {
-    // create canvas on id=game
-    createCanvas(800, 600).parent('game');
+    createCanvas(1200, 1000).parent('game');
+    
+    for (let i = 0; i < 20; i++) {
+        walls.push(new Wall(random(0, width), random(0, height), random(20, 100), random(20, 100)));
+    }
 }
 
 function draw() {
     background(0);
-    fill(255);
-   
-    // draw player
-    player.move();
+    player.update();
     player.draw();
 
-    // draw walls
     for (let wall of walls) {
-        fill(255);
-        rect(wall.x, wall.y, wall.w, wall.h);
+        wall.draw();
     }
 }
-
