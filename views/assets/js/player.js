@@ -54,14 +54,14 @@ class Player {
 
     collideWalls(walls) {
         for (let wall of walls) {
-            if (this.position.x + this.width > wall.x && this.position.x < wall.x + wall.w &&
+            if (wall.collision && this.position.x + this.width > wall.x && this.position.x < wall.x + wall.w &&
                 this.position.y + this.height > wall.y && this.position.y < wall.y + wall.h) {
 
                 // Collision detected, adjust position
                 let dx = (this.position.x + this.width / 2) - (wall.x + wall.w / 2);
                 let dy = (this.position.y + this.height / 2) - (wall.y + wall.h / 2);
-                let overlapX = this.width / 2 + wall.w / 2 - abs(dx);
-                let overlapY = this.height / 2 + wall.h / 2 - abs(dy);
+                let overlapX = this.width / 2 + wall.w / 2 - Math.abs(dx);
+                let overlapY = this.height / 2 + wall.h / 2 - Math.abs(dy);
 
                 if (overlapX < overlapY) {
                     // Colliding from the sides
@@ -69,7 +69,7 @@ class Player {
                         this.position.x += overlapX;
                     else
                         this.position.x -= overlapX;
-                    
+
                     this.velocity.x = 0;
                 } else {
                     // Colliding from top or bottom
@@ -77,7 +77,7 @@ class Player {
                         this.position.y += overlapY;
                     else
                         this.position.y -= overlapY;
-                    
+
                     this.velocity.y = 0;
                     this.isOnGround = dy < 0; // Check if colliding from the top
                 }

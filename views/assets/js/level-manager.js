@@ -17,6 +17,7 @@ class Level {
 class LevelManager {
     constructor() {
         this.levels = [];
+        this.currentLevel = null;
     }
 
     async loadLevel(levelName) {
@@ -24,6 +25,11 @@ class LevelManager {
             const response = await fetch(`levels/${levelName}.json`);
             const data = await response.json();
             const level = new Level(data);
+
+            console.log(`Loaded level "${levelName}"`, level);
+            const scriptResponse = await fetch(`levels/${levelName}-script.bjs`);
+            level.script = await scriptResponse.text();
+
             return level;
         } catch (error) {
             console.error(`Error loading level "${levelName}":`, error);

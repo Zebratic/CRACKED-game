@@ -19,6 +19,11 @@ function setupWebserver(app) {
         res.sendFile(__dirname + `/levels/${levelName}.json`);
     });
 
+    app.get('/levels/:levelName-script.bjs', (req, res) => {
+        const levelName = req.params.levelName;
+        res.sendFile(__dirname + `/levels/${levelName}-script.bjs`);
+    });
+
     console.log('Webserver setup complete');
 }
 

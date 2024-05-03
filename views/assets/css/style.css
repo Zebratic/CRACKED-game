@@ -1,0 +1,11 @@
+#game {
+    margin: 5px;
+    width: 1000px;
+    height: 800px;
+}
+
+#editor {
+    margin: 5px;
+    height: 800px;
+    width: 100%;
+}

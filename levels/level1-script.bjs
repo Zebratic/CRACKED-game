@@ -1,0 +1,5 @@
+var player = ref.player;
+
+player.speed = 5;
+player.x = 50;
+player.y = 50;
