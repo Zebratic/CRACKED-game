@@ -1,6 +1,7 @@
 class Level {
     constructor(data) {
         this.name = data.name;
+        this.allowedObjects = data.allowedObjects || [];
         this.startPosition = createVector(data.startPosition.x, data.startPosition.y);
         this.endPosition = createVector(data.endPosition.x, data.endPosition.y);
         this.walls = data.walls.map(wallData => ({
@@ -9,14 +10,12 @@ class Level {
             width: wallData.width,
             height: wallData.height
         }));
-        this.scripts = data.scripts || [];
     }
 }
 
 
 class LevelManager {
     constructor() {
-        this.levels = [];
         this.currentLevel = null;
     }
 
@@ -29,6 +28,9 @@ class LevelManager {
             console.log(`Loaded level "${levelName}"`, level);
             const scriptResponse = await fetch(`levels/${levelName}-script.bjs`);
             level.script = await scriptResponse.text();
+            
+            console.log(`Loaded script for level "${levelName}"`, level.script);
+            this.currentLevel = level;
 
             return level;
         } catch (error) {

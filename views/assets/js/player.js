@@ -22,7 +22,7 @@ class Player {
             this.velocity.x += this.speed;
     
         // Jumping
-        if ((keyIsDown(UP_ARROW) && this.isOnGround) || (keyIsDown(UP_ARROW) && this.position.y + this.height >= height)) {
+        if (keyIsDown(UP_ARROW) && this.isOnGround && this.velocity.y >= 0) {
             this.velocity.y = -this.jumpStrength;
             this.isOnGround = false;
         }
@@ -46,6 +46,7 @@ class Player {
         this.position.x = constrain(this.position.x, 0, width - this.width);
         this.position.y = constrain(this.position.y, 0, height - this.height);
     }
+    
 
     draw() {
         fill(255, 0, 0);
@@ -83,6 +84,23 @@ class Player {
                 }
             }
         }
+        
+        // Check if player is on the ground
+        let isOnGround = false;
+        for (let wall of walls) {
+            if (wall.collision && this.position.x + this.width > wall.x && this.position.x < wall.x + wall.w && this.position.y + this.height === wall.y) {
+                isOnGround = true;
+                break;
+            }
+        }
+        
+        // Check if player is at the bottom of the play area
+        if (this.position.y + this.height >= height) {
+            isOnGround = true;
+        }
+        
+        // If player is not on the ground, disable jumping
+        this.isOnGround = isOnGround;
     }
 }
 

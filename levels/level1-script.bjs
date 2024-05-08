@@ -1,5 +1,2 @@
-var player = ref.player;
-
-player.speed = 5;
-player.x = 50;
-player.y = 50;
+this.player.speed = %{this.player.speed}%;
+this.player.gravity = %{this.player.gravity}%;

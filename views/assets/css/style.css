@@ -1,11 +1,23 @@
-#game {
-    margin: 5px;
-    width: 1000px;
-    height: 800px;
+#editorWindow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 700px;
+    height: 500px;
+    margin: 15px;
+    box-shadow: 0 0 10px 5px #000000;
+    background-color: #1a202c;
+}
+
+#editorHeader {
+    background-color: #f7fafc;
+    padding: 10px;
+    cursor: move;
+    user-select: none;
 }
 
 #editor {
-    margin: 5px;
-    height: 800px;
+    position: absolute;
     width: 100%;
+    height: calc(100% - 40px);
 }
