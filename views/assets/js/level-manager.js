@@ -1,3 +1,5 @@
+import Enemy from './enemy.js';
+
 class Level {
     constructor(data) {
         this.name = data.name;
@@ -10,6 +12,7 @@ class Level {
             width: wallData.width,
             height: wallData.height
         }));
+        this.enemies = data.enemies;
     }
 }
 

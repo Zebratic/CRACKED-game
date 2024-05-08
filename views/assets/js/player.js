@@ -12,17 +12,18 @@ class Player {
         this.friction = 0.8; // Adjusted friction for smoother sliding
         this.isOnGround = false;
         this.terminalVelocity = 15; // Terminal velocity to prevent indefinite acceleration
+        this.blocked = false;
     }
 
     update(walls) {
         // Player controls
-        if (keyIsDown(LEFT_ARROW))
+        if (keyIsDown(LEFT_ARROW) && !this.blocked)
             this.velocity.x -= this.speed;
-        if (keyIsDown(RIGHT_ARROW))
+        if (keyIsDown(RIGHT_ARROW) && !this.blocked)
             this.velocity.x += this.speed;
     
         // Jumping
-        if (keyIsDown(UP_ARROW) && this.isOnGround && this.velocity.y >= 0) {
+        if (keyIsDown(UP_ARROW) && this.isOnGround && this.velocity.y >= 0 && !this.blocked) {
             this.velocity.y = -this.jumpStrength;
             this.isOnGround = false;
         }

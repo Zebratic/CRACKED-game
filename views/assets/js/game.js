@@ -1,6 +1,7 @@
 import Wall from './wall.js';
 import LevelManager from './level-manager.js';
 import Player from './player.js';
+import Enemy from './enemy.js';
 import Interpreter from './interpreter.js';
 import MusicPlayer from './musicplayer.js';
 import SpeedrunTimer from './speedrun-timer.js';
@@ -16,17 +17,24 @@ levelManager.levelList = await levelManager.getLevelList();
 
 
 let walls = [];
+let enemies = [];
 
 function loadLevel(levelName) {
     walls = [];
+    enemies = [];
     player = new Player();
+    player.blocked = true;
     interpreter = new Interpreter(player, levelManager);
     window.interpreter = interpreter;
 
     levelManager.loadLevel(levelName).then(level => {
         if (level) {
             player.position = level.startPosition;
-            walls = level.walls.map(wallData => new Wall(wallData.x, wallData.y, wallData.width, wallData.height));
+            if (level.walls)
+                walls = level.walls.map(wallData => new Wall(wallData.x, wallData.y, wallData.width, wallData.height));
+            
+            if (level.enemies)
+                enemies = level.enemies.map(enemyData => new Enemy(enemyData));
 
             var script = interpreter.returnLevelScript(level.script);
             editor.setValue(script);
@@ -36,7 +44,12 @@ function loadLevel(levelName) {
 
             // reset speedrun timer
             speedrunTimer.reset();
-            speedrunTimer.start(level.id);
+
+            setTimeout(() => {
+                player.blocked = false;
+                speedrunTimer.start(level.id);
+            }, 500);
+
         }
     });
 }
@@ -74,7 +87,38 @@ function draw() {
         wall.draw((debugMode ? '#' + (walls.indexOf(wall) + 1) + ' x: ' + wall.x + ', y: ' + wall.y : null));
     }
 
-    // check if player has reached the end of the level levelManager.currentLevel.endPosition
+    // draw enemies
+    for (let enemy of enemies) {
+        enemy.move();
+        enemy.draw();
+    }
+
+    // check for player-enemy collision
+    for (let enemy of enemies) {
+        // draw hitbox
+        if (debugMode) {
+            fill(255, 0, 0, 100);
+            rect(enemy.x - (enemy.size / 2), enemy.y - (enemy.size / 2), enemy.size, enemy.size);
+        }
+        if (player.position.x + player.width > enemy.x - (enemy.size / 2) &&
+            player.position.x < enemy.x + (enemy.size / 2) &&
+            player.position.y + player.height > enemy.y - (enemy.size / 2) &&
+            player.position.y < enemy.y + (enemy.size / 2)) {
+            console.log('Player died');
+            player.position = levelManager.currentLevel.startPosition;
+            player.blocked = true;
+
+            // restart level
+            isRestarting = true;
+            restartStopwatch = millis();
+        }
+    }
+
+
+
+
+
+    // ============= LEVEL COMPLETION =============
     if (levelManager.currentLevel && levelManager.currentLevel.endPosition) {
         if (player.position.x + player.width > levelManager.currentLevel.endPosition.x &&
             player.position.x < levelManager.currentLevel.endPosition.x + 15 &&
@@ -109,7 +153,7 @@ function draw() {
     // ============= RESTART ANIMATION =============
     if (isRestarting) {
         var timePassed = millis() - restartStopwatch;
-        if (timePassed < 1000) {
+        if (timePassed < 500) {
             fill(255, 255, 255, 255 - timePassed);
             rect(0, 0, width, height);
             if (!isLevelLoaded) {
