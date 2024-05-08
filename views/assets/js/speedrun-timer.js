@@ -51,13 +51,17 @@ class SpeedrunTimer {
 
     draw() {
         fill(255);
-        textSize(20);
-        textAlign(LEFT, TOP);
-        text('Time: ' + this.formatTime(this.currentTime), 10, 10);
+        textSize(24);
+        textAlign(CENTER, TOP);
+        text(this.formatTime(this.currentTime), width / 2, 10);
 
         let highscore = this.highscores.find(score => score.levelId === this.currentId);
         if (highscore)
-            text('Best time: ' + this.formatTime(highscore.time), 10, 40);
+        {
+            textSize(16);
+            fill(this.currentTime > highscore.time ? 100 : 255);
+            text('Best: ' + this.formatTime(highscore.time), width / 2, 40);
+        }
     }
 
     update() {

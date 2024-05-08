@@ -41,8 +41,9 @@ function loadLevel(levelName) {
     });
 }
 
-
+var debugMode = false;
 var musicStarted = false;
+
 var isRestarting = false;
 var isLevelLoaded = false;
 var restartStopwatch = 0;
@@ -67,10 +68,10 @@ function draw() {
     // ============= GAME LOOP =============
     background(30, 30, 30);
     player.update(walls);
-    player.draw();
+    player.draw(debugMode);
 
     for (let wall of walls) {
-        wall.draw(walls.indexOf(wall) + 1);
+        wall.draw((debugMode ? '#' + (walls.indexOf(wall) + 1) + ' x: ' + wall.x + ', y: ' + wall.y : null));
     }
 
     // check if player has reached the end of the level levelManager.currentLevel.endPosition
@@ -90,7 +91,12 @@ function draw() {
             var levelIndex = levelManager.levelList.indexOf(levelManager.currentLevel.id);
 
             if (levelIndex < levelManager.levelList.length - 1)
-                loadLevel(levelManager.levelList[levelIndex + 1]);
+            {
+                // load next level with animation
+                levelManager.currentLevel.id = levelManager.levelList[levelIndex + 1];
+                isRestarting = true;
+                restartStopwatch = millis();
+            }
             else
                 console.log('All levels completed');
         }
@@ -120,6 +126,21 @@ function draw() {
 
 
     // ============= UI OVERLAY =============
+    fill(255);
+    textSize(16);
+    textAlign(LEFT, TOP);
+    text('Press R to restart', 10, 10);
+    text('Press ESC to toggle editor', 10, 30);
+    text('Press I to toggle debug info', 10, 50);
+
+    // draw level name
+    if (levelManager.currentLevel)
+    {
+        textAlign(RIGHT, TOP);
+        text(levelManager.currentLevel.name, width - 10, 10);
+    }
+
+    // draw speedrun timer
     speedrunTimer.update();
     speedrunTimer.draw();
     // =========================================
@@ -139,6 +160,10 @@ window.addEventListener('keydown', function(event) {
 
         case 'escape':
             toggleEditor();
+            break;
+
+        case 'i':
+            debugMode = !debugMode;
             break;
     }
 

@@ -14,7 +14,8 @@ class Wall {
 
         if (label) {
             textAlign(CENTER, CENTER);
-            fill(255 - this.color.r, 255 - this.color.g, 255 - this.color.b);
+            textSize(16);
+            fill((Math.sin(frameCount / 10) + 1) * 127, (Math.sin(frameCount / 10 + 2) + 1) * 127, (Math.sin(frameCount / 10 + 4) + 1) * 127);
             text(label, this.x + this.w / 2, this.y + this.h / 2);
         }
     }

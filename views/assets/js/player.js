@@ -48,9 +48,46 @@ class Player {
     }
     
 
-    draw() {
+    draw(debugMode) {
         fill(255, 0, 0);
         rect(this.position.x, this.position.y, this.width, this.height);
+
+        if (debugMode) {
+            var debugoffsetY = 100;
+            fill(255);
+            textSize(16);
+            textAlign(LEFT, TOP);
+
+            // priny entire player object top left
+            var values = Object.values(this);
+            for (var i = 0; i < values.length; i++) {
+                // if value is p5.Vector, print x and y and limit to 2 decimal places
+                if (values[i] instanceof p5.Vector) {
+                    text(`${Object.keys(this)[i]}: x: ${values[i].x.toFixed(2)}, y: ${values[i].y.toFixed(2)}`, 10, debugoffsetY + i * 20);
+                } 
+                // else if object expand and print all keys and values in 1 line
+                else {
+                    if (typeof values[i] === 'object') {
+                        var keys = Object.keys(values[i]);
+                        var subValues = Object.values(values[i]);
+                        var line = `${Object.keys(this)[i]}: `;
+                        for (var j = 0; j < keys.length; j++) {
+                            if (typeof subValues[j] === 'number') {
+                                line += `${keys[j]}: ${subValues[j].toFixed(2)} `;
+                            } else {
+                                line += `${keys[j]}: ${subValues[j]} `;
+                            }
+                        }
+                        text(line, 10, debugoffsetY + i * 20);
+
+                    }
+                    // else print key and value
+                    else
+                        text(`${Object.keys(this)[i]}: ${values[i]}`, 10, debugoffsetY + i * 20);
+                }
+            }
+
+        }
     }
 
     collideWalls(walls) {
@@ -97,6 +134,8 @@ class Player {
         // Check if player is at the bottom of the play area
         if (this.position.y + this.height >= height) {
             isOnGround = true;
+            this.position.y = height - this.height;
+            this.velocity.y = 0;
         }
         
         // If player is not on the ground, disable jumping
