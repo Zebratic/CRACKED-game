@@ -13,6 +13,7 @@ class Level {
             height: wallData.height
         }));
         this.enemies = data.enemies;
+        this.gravityZones = data.gravityZones;
     }
 }
 

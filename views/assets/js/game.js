@@ -2,6 +2,7 @@ import Wall from './wall.js';
 import LevelManager from './level-manager.js';
 import Player from './player.js';
 import Enemy from './enemy.js';
+import GravityZone from './gravity-zone.js';
 import Interpreter from './interpreter.js';
 import MusicPlayer from './musicplayer.js';
 import SpeedrunTimer from './speedrun-timer.js';
@@ -18,10 +19,13 @@ levelManager.levelList = await levelManager.getLevelList();
 
 let walls = [];
 let enemies = [];
+let gravityZones = [];
 
 function loadLevel(levelName) {
     walls = [];
     enemies = [];
+    gravityZones = [];
+
     player = new Player();
     player.blocked = true;
     interpreter = new Interpreter(player, levelManager);
@@ -32,9 +36,13 @@ function loadLevel(levelName) {
             player.position = level.startPosition;
             if (level.walls)
                 walls = level.walls.map(wallData => new Wall(wallData.x, wallData.y, wallData.width, wallData.height));
-            
+
             if (level.enemies)
                 enemies = level.enemies.map(enemyData => new Enemy(enemyData));
+
+            if (level.gravityZones)
+                gravityZones = level.gravityZones.map(zoneData => new GravityZone(zoneData));
+
 
             var script = interpreter.returnLevelScript(level.script);
             editor.setValue(script);
@@ -83,9 +91,20 @@ function draw() {
     player.update(walls);
     player.draw(debugMode);
 
+    // draw walls
     for (let wall of walls) {
         wall.draw((debugMode ? '#' + (walls.indexOf(wall) + 1) + ' x: ' + wall.x + ', y: ' + wall.y : null));
     }
+
+    // draw gravity zones
+    for (let zone of gravityZones) {
+        zone.applyGravity(player);
+        zone.update();
+        zone.draw(debugMode);
+    }
+
+
+
 
     // draw enemies
     for (let enemy of enemies) {

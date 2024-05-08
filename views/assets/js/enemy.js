@@ -1,59 +1,13 @@
-/*
-"enemies": [
-    {
-      "type": "saw",
-      "x": 150,
-      "y": 300,
-      "size": 50,
-      "speed": 1,
-      "coordinates": [
-        {
-          "x": 150,
-          "y": 300
-        },
-        {
-          "x": 200,
-          "y": 300
-        }
-      ]
-    },
-    {
-      "type": "saw",
-      "x": 300,
-      "y": 260,
-      "size": 20,
-      "speed": 1,
-      "coordinates": [
-        {
-          "x": 300,
-          "y": 260
-        },
-        {
-          "x": 400,
-          "y": 260
-        }
-      ]
-    }
-  ]
-  */
-
-
- // spinning 4 rectangles to create a saw
+// spinning 4 rectangles to create a saw
 function drawSaw(x, y, size) {
     push();
     translate(x, y);
     rotate(frameCount / 10.0);
-    fill(255, 0, 0);
+    fill(70, 70, 70);
     rect(-size / 2, -size / 2, size, size);
-    rotate(PI / 2);
-    fill(255, 255, 0);
-    rect(-size / 2, -size / 2, size, size);
-    rotate(PI / 2);
-    fill(255, 0, 255);
-    rect(-size / 2, -size / 2, size, size);
-    rotate(PI / 2);
-    fill(0, 255, 255);
-    rect(-size / 2, -size / 2, size, size);
+    rotate(PI / 4);
+    fill(100, 100, 100);
+    rect(-size / 2.2, -size / 2.2, size / 1.1, size / 1.1);
     pop();
 }
 
