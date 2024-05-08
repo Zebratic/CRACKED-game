@@ -60,7 +60,7 @@ class GravityZone {
     draw(debugMode) {
         // blue stars randomly placed
         for (let star of this.stars) {
-            fill(0, 0, 255, star.opacity);
+            fill(50, 255, 255, star.opacity);
             noStroke();
             ellipse(star.x, star.y, star.size);
         }
@@ -80,7 +80,8 @@ class GravityZone {
         if (player.position.x + player.width > this.x &&
             player.position.x < this.x + this.width &&
             player.position.y + player.height > this.y &&
-            player.position.y < this.y + this.height) {
+            player.position.y < this.y + this.height &&
+            !player.isOnGround) {
             player.velocity.y += this.gravity;
         }
     }

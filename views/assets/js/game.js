@@ -70,8 +70,7 @@ var isLevelLoaded = false;
 var restartStopwatch = 0;
 
 function setup() {
-
-    createCanvas(1000, 800).parent('game');
+    createCanvas(1920, 1000).parent('game');
     loadLevel(levelManager.levelList[0]);
 
     // on any mouse click, play the music
@@ -103,9 +102,6 @@ function draw() {
         zone.draw(debugMode);
     }
 
-
-
-
     // draw enemies
     for (let enemy of enemies) {
         enemy.move();
@@ -123,6 +119,7 @@ function draw() {
             player.position.x < enemy.x + (enemy.size / 2) &&
             player.position.y + player.height > enemy.y - (enemy.size / 2) &&
             player.position.y < enemy.y + (enemy.size / 2)) {
+           
             console.log('Player died');
             player.position = levelManager.currentLevel.startPosition;
             player.blocked = true;
@@ -130,7 +127,7 @@ function draw() {
             // restart level
             isRestarting = true;
             restartStopwatch = millis();
-        }
+        }   
     }
 
 

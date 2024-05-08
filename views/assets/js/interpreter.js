@@ -1,9 +1,3 @@
-/*
-this.player.speed = %{this.player.speed}%;
-this.player.gravity = %{this.player.gravity}%;
-*/
-
-
 class Interpreter {
     constructor(player, levelManager) {
         this.player = player;
