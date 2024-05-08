@@ -8,9 +8,15 @@ class Wall {
         this.color = color;
     }
 
-    draw() {
+    draw(label = null) {
         fill(this.color.r, this.color.g, this.color.b);
         rect(this.x, this.y, this.w, this.h);
+
+        if (label) {
+            textAlign(CENTER, CENTER);
+            fill(255 - this.color.r, 255 - this.color.g, 255 - this.color.b);
+            text(label, this.x + this.w / 2, this.y + this.h / 2);
+        }
     }
 }
 

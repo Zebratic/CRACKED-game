@@ -3,17 +3,25 @@ import LevelManager from './level-manager.js';
 import Player from './player.js';
 import Interpreter from './interpreter.js';
 import MusicPlayer from './musicplayer.js';
+import SpeedrunTimer from './speedrun-timer.js';
 
 
 let player = new Player();
 let levelManager = new LevelManager();
 let interpreter = new Interpreter(player, levelManager);
 let musicPlayer = new MusicPlayer();
+let speedrunTimer = new SpeedrunTimer();
+
+levelManager.levelList = await levelManager.getLevelList();
+
 
 let walls = [];
 
 function loadLevel(levelName) {
     walls = [];
+    player = new Player();
+    interpreter = new Interpreter(player, levelManager);
+    window.interpreter = interpreter;
 
     levelManager.loadLevel(levelName).then(level => {
         if (level) {
@@ -25,6 +33,10 @@ function loadLevel(levelName) {
 
             // add wall with no collision to indicate the end of the level
             walls.push(new Wall(level.endPosition.x, level.endPosition.y, 15, 15, false, { r: 0, g: 255, b: 0 }));
+
+            // reset speedrun timer
+            speedrunTimer.reset();
+            speedrunTimer.start(level.id);
         }
     });
 }
@@ -36,8 +48,9 @@ var isLevelLoaded = false;
 var restartStopwatch = 0;
 
 function setup() {
+
     createCanvas(1000, 800).parent('game');
-    loadLevel('level1');
+    loadLevel(levelManager.levelList[0]);
 
     // on any mouse click, play the music
     window.addEventListener('click', function() {
@@ -57,18 +70,31 @@ function draw() {
     player.draw();
 
     for (let wall of walls) {
-        wall.draw();
+        wall.draw(walls.indexOf(wall) + 1);
     }
 
-    // check if player has reached the end of the level
-    if (player.position.x + player.width > width && player.position.y + player.height > height) {
-        if (!isRestarting) {
-            isRestarting = true;
-            restartStopwatch = millis();
+    // check if player has reached the end of the level levelManager.currentLevel.endPosition
+    if (levelManager.currentLevel && levelManager.currentLevel.endPosition) {
+        if (player.position.x + player.width > levelManager.currentLevel.endPosition.x &&
+            player.position.x < levelManager.currentLevel.endPosition.x + 15 &&
+            player.position.y + player.height > levelManager.currentLevel.endPosition.y &&
+            player.position.y < levelManager.currentLevel.endPosition.y + 15) {
+            
+            // stop speedrun timer
+            speedrunTimer.stop();
+            speedrunTimer.saveHighscore(levelManager.currentLevel.id);
+
+            console.log('Level completed in', speedrunTimer.formatTime(speedrunTimer.currentTime));
+                
+            // load next level
+            var levelIndex = levelManager.levelList.indexOf(levelManager.currentLevel.id);
+
+            if (levelIndex < levelManager.levelList.length - 1)
+                loadLevel(levelManager.levelList[levelIndex + 1]);
+            else
+                console.log('All levels completed');
         }
     }
-
-
     // =====================================
 
     
@@ -90,13 +116,20 @@ function draw() {
         }
     }
     // =============================================
+
+
+
+    // ============= UI OVERLAY =============
+    speedrunTimer.update();
+    speedrunTimer.draw();
+    // =========================================
 }
 
 
 
 // on key press R, reload the level
 window.addEventListener('keydown', function(event) {
-    switch (event.key) {
+    switch (event.key.toLowerCase()) {
         case 'r':
             if (!isRestarting) {
                 isRestarting = true;
@@ -104,7 +137,7 @@ window.addEventListener('keydown', function(event) {
             }
             break;
 
-        case 'e':
+        case 'escape':
             toggleEditor();
             break;
     }

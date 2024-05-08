@@ -15,13 +15,15 @@ function setupWebserver(app) {
     });
 
     app.get('/levels/:levelName.json', (req, res) => {
-        const levelName = req.params.levelName;
-        res.sendFile(__dirname + `/levels/${levelName}.json`);
+        res.sendFile(__dirname + `/levels/${req.params.levelName}.json`);
     });
 
-    app.get('/levels/:levelName-script.bjs', (req, res) => {
-        const levelName = req.params.levelName;
-        res.sendFile(__dirname + `/levels/${levelName}-script.bjs`);
+    app.get('/levels/:levelName.bjs', (req, res) => {
+        res.sendFile(__dirname + `/levels/${req.params.levelName}.bjs`);
+    });
+
+    app.get('/levels', (req, res) => {
+        res.sendFile(__dirname + '/levels.json');
     });
 
     console.log('Webserver setup complete');
