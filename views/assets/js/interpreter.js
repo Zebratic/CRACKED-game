@@ -8,6 +8,9 @@ class Interpreter {
     constructor(player, levelManager) {
         this.player = player;
         this.levelManager = levelManager;
+        console.log('Interpreter initialized');
+        console.log('Player:', this.player);
+        console.log('Level manager:', this.levelManager);
         
         this.errors = [];
     }

@@ -1,32 +1,21 @@
+import Wall from './wall.js';
 import LevelManager from './level-manager.js';
 import Player from './player.js';
 import Interpreter from './interpreter.js';
+import MusicPlayer from './musicplayer.js';
 
-class Wall {
-    constructor(x, y, w, h, collision = true, color = { r: 255, g: 255, b: 255 }) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.collision = collision;
-        this.color = color;
-    }
 
-    draw() {
-        fill(this.color.r, this.color.g, this.color.b);
-        rect(this.x, this.y, this.w, this.h);
-    }
-}
-
-let walls = [];
 let player = new Player();
 let levelManager = new LevelManager();
 let interpreter = new Interpreter(player, levelManager);
+let musicPlayer = new MusicPlayer();
 
-function setup() {
-    createCanvas(1000, 800).parent('game');
+let walls = [];
 
-    levelManager.loadLevel('level1').then(level => {
+function loadLevel(levelName) {
+    walls = [];
+
+    levelManager.loadLevel(levelName).then(level => {
         if (level) {
             player.position = level.startPosition;
             walls = level.walls.map(wallData => new Wall(wallData.x, wallData.y, wallData.width, wallData.height));
@@ -40,15 +29,96 @@ function setup() {
     });
 }
 
+
+var musicStarted = false;
+var isRestarting = false;
+var isLevelLoaded = false;
+var restartStopwatch = 0;
+
+function setup() {
+    createCanvas(1000, 800).parent('game');
+    loadLevel('level1');
+
+    // on any mouse click, play the music
+    window.addEventListener('click', function() {
+        if (!musicStarted) {
+            musicPlayer.load('/assets/sound/music.mp3');
+            musicPlayer.play();
+            musicStarted = true;
+        }
+    });
+}
+
+
 function draw() {
-    background(0);
+    // ============= GAME LOOP =============
+    background(30, 30, 30);
     player.update(walls);
     player.draw();
 
     for (let wall of walls) {
         wall.draw();
     }
+
+    // check if player has reached the end of the level
+    if (player.position.x + player.width > width && player.position.y + player.height > height) {
+        if (!isRestarting) {
+            isRestarting = true;
+            restartStopwatch = millis();
+        }
+    }
+
+
+    // =====================================
+
+    
+
+    
+    // ============= RESTART ANIMATION =============
+    if (isRestarting) {
+        var timePassed = millis() - restartStopwatch;
+        if (timePassed < 1000) {
+            fill(255, 255, 255, 255 - timePassed);
+            rect(0, 0, width, height);
+            if (!isLevelLoaded) {
+                isLevelLoaded = true;
+                loadLevel(levelManager.currentLevel.id);
+            }
+        } else {
+            isRestarting = false;
+            isLevelLoaded = false;
+        }
+    }
+    // =============================================
 }
+
+
+
+// on key press R, reload the level
+window.addEventListener('keydown', function(event) {
+    switch (event.key) {
+        case 'r':
+            if (!isRestarting) {
+                isRestarting = true;
+                restartStopwatch = millis();
+            }
+            break;
+
+        case 'e':
+            toggleEditor();
+            break;
+    }
+
+
+    if (event.key === 'r') {
+        if (!isRestarting) {
+            isRestarting = true;
+            restartStopwatch = millis();
+        }
+    }
+});
+
+
 
 
 window.setup = setup;
