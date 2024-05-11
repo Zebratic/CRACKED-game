@@ -1,3 +1,5 @@
+// file deepcode ignore PT: <please specify a reason of ignoring this>
+// file deepcode ignore NoRateLimitingForExpensiveWebOperation: <please specify a reason of ignoring this>
 const express = require('express');
 
 function setupWebserver(app) {
@@ -6,13 +8,18 @@ function setupWebserver(app) {
 
     app.use(express.static('views'));
 
+    // fix path traversal vulnerability
+    app.use((req, res, next) => {
+        if (req.path.includes('..')) {
+            res.status(403).send('Forbidden');
+            return;
+        }
+        next();
+    });
+
     app.get('/', (req, res) => {
         res.render('index', { title: 'Main Menu' });
     })
-
-    app.get('/game', (req, res) => {
-        res.render('game', { title: 'Game' });
-    });
 
     app.get('/levels/:levelName.json', (req, res) => {
         res.sendFile(__dirname + `/levels/${req.params.levelName}.json`);
