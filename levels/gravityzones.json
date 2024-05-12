@@ -2,12 +2,11 @@
   "name": "Gravity Zones",
   "allowedObjects": [
     "this.gravityZones.*.direction",
-    "this.gravityZones.*.gravity",
     "this.gravityZones.*.refresh"
   ],
   "startPosition": {
     "x": 200,
-    "y": 1060
+    "y": 1070
   },
   "endPosition": {
     "x": 1476,
@@ -98,7 +97,7 @@
       "gravity": 2,
       "invisible": false,
       "direction": "down",
-      "ignoreWalls": true,
+      "ignoreWalls": false,
       "starDensity": 0.001,
       "colorIntensity": 255
     }

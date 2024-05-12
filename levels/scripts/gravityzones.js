@@ -6,6 +6,5 @@ var directions = {
     CENTER: 4
 };
 
-this.gravityZones[0].direction = directions.UP;
-this.gravityZones[0].gravity = 1.5;
+this.gravityZones[0].direction = `${this.gravityZones[0].direction}`;
 this.gravityZones[0].refresh();

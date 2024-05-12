@@ -25,8 +25,8 @@ function setupWebserver(app) {
         res.sendFile(__dirname + `/levels/${req.params.levelName}.json`);
     });
 
-    app.get('/levels/:levelName.bjs', (req, res) => {
-        res.sendFile(__dirname + `/levels/${req.params.levelName}.bjs`);
+    app.get('/levels/:levelName.js', (req, res) => {
+        res.sendFile(__dirname + `/levels/scripts/${req.params.levelName}.js`);
     });
 
     app.get('/levels', (req, res) => {

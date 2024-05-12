@@ -1,11 +1,3 @@
-const Direction = {
-    UP: 0,
-    DOWN: 1,
-    LEFT: 2,
-    RIGHT: 3,
-    CENTER: 4
-};
-
 class Interpreter {
     constructor(player, levelManager, walls, enemies, gravityZones, spikes, labels, endPosition) {
         this.player = player;
@@ -22,6 +14,10 @@ class Interpreter {
         this.objectToWrite = false;
 
         this.errors = [];
+        this.libraries = [
+            'console',
+            'Math'
+        ];
     }
 
 
@@ -29,31 +25,10 @@ class Interpreter {
         console.log('Updating objects');
 
         var allowedObjects = this.levelManager.currentLevel.allowedObjects;
-        /*
-            [
-                "this.gravityZones.*",
-                "this.player.*",
-            ]
-        */
-
-        let library = ['console', 'Math'];
 
         try {
             var allowedCode = '';
-            allowedCode += library.map(lib => `var ${lib} = window.${lib};`).join('\n');
-
-            /*
-            var test = {
-                UP: 0,
-                DOWN: 1,
-                LEFT: 2,
-                RIGHT: 3,
-                CENTER: 4
-            };
-            let wow = 0;
-            
-            this.gravityZones[0].direction = test.UP;
-            */
+            allowedCode += this.libraries.map(lib => `var ${lib} = window.${lib};`).join('\n');
              
             // const, let, var variables also check for multi line declarations
             var variables = gameCode.match(/(?:const|let|var)\s+\w+\s*=\s*[^;]+;/gs) || [];
@@ -109,12 +84,11 @@ class Interpreter {
 
     returnLevelScript(bjsScript) {
 
-        // use regex to replace values %{}% with actual values
-        bjsScript = bjsScript.replace(/%{.*?}%/g, match => {
-            // evaluate the expression inside the %{}%
-            var expression = match.slice(2, -2);
-
+        // use regex to replace values `${this.walls[0].collision}` with actual values
+        bjsScript = bjsScript.replace(/`\$\{([^}]+)\}`/g, (match) => {
+            var expression = match.slice(2, -1);
             try {
+                console.log('Evaluating expression:', expression);
                 return eval(expression);
             } catch (error) {
                 console.error(`Error evaluating expression "${expression}":`, error);

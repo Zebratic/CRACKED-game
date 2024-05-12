@@ -10,8 +10,6 @@ import SpeedrunTimer from './speedrun-timer.js';
 import Label from './label.js';
 import EndPosition from './end-position.js';
 import LevelEditor from './level-editor.js';
-import Direction from './directions.js';
-
 
 
 let player = new Player();
