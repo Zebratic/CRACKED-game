@@ -1,4 +1,4 @@
-var test = {
+var directions = {
     UP: 0,
     DOWN: 1,
     LEFT: 2,
@@ -6,4 +6,6 @@ var test = {
     CENTER: 4
 };
 
-this.gravityZones[0].direction = test.UP;
+this.gravityZones[0].direction = directions.UP;
+this.gravityZones[0].gravity = 1.5;
+this.gravityZones[0].refresh();

@@ -1,7 +1,7 @@
 {
   "name": "Walls",
   "allowedObjects": [
-    "this.walls"
+    "this.walls.*"
   ],
   "startPosition": {
     "x": 648,

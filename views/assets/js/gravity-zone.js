@@ -18,19 +18,26 @@ class GravityZone {
         this.stars = [];
 
         if (!this.invisible) {
-            for (let i = 0; i < this.width * this.height * this.starDensity; i++) {
-                this.stars.push({
-                    x: this.x + random(this.width),
-                    y: this.y + random(this.height),
-                    size: random(1, 5),
-                    opacity: random(100, 255)
-                });
-            }
+            this.refresh();
+        }
+    }
+    
+    refresh() {
+        this.stars = [];
+        if (this.invisible) return;
+        
+        for (let i = 0; i < this.width * this.height * this.starDensity; i++) {
+            this.stars.push({
+                x: this.x + random(this.width),
+                y: this.y + random(this.height),
+                size: random(1, 5),
+                opacity: random(100, 255)
+            });
         }
     }
 
     update() {
-        if (this.stars && this.stars.length > 0) {
+        if (!this.invisible && this.stars && this.stars.length > 0) {
             for (let star of this.stars) {
                 // based on direction, move stars
                 switch (this.direction) {

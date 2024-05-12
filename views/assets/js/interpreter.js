@@ -29,12 +29,18 @@ class Interpreter {
         console.log('Updating objects');
 
         var allowedObjects = this.levelManager.currentLevel.allowedObjects;
+        /*
+            [
+                "this.gravityZones.*",
+                "this.player.*",
+            ]
+        */
 
         let library = ['console', 'Math'];
 
         try {
             var allowedCode = '';
-            allowedCode += library.map(lib => `var ${lib} = window.${lib};`).join('\n') + '\n';
+            allowedCode += library.map(lib => `var ${lib} = window.${lib};`).join('\n');
 
             /*
             var test = {
@@ -51,43 +57,28 @@ class Interpreter {
              
             // const, let, var variables also check for multi line declarations
             var variables = gameCode.match(/(?:const|let|var)\s+\w+\s*=\s*[^;]+;/gs) || [];
-           
-
-
             var functions = gameCode.match(/function\s+\w+\s*\([^)]*\)\s*\{[^{}]*\}/g) || [];
             var executableLines = gameCode.match(/[^{};]+;/g);
             console.log('Variables:', variables);
             console.log('Functions:', functions);
             console.log('Executable Lines:', executableLines);
 
-            // go through executable lines and check if variable is allowed
+            // go through executable lines and check if line matches allowed objects regex
             if (executableLines) {
                 executableLines = executableLines.filter(line => {
-                    var variable = line.match(/\b\w+\b/);
-                    if (variable && allowedObjects.includes(variable[0])) {
-                        return true;
-                    } else {
-                        console.log('Variable not allowed:', variable);
-                        return false;
+                    for (let object of allowedObjects) {
+                        const objectRegex = new RegExp(`\\b${object}\\b`);
+                        if (objectRegex.test(line)) return true;
                     }
                 });
             }
 
-            // declare variables
-            if (variables) allowedCode += variables.join('\n') + '\n';
-            if (functions) allowedCode += functions.join('\n') + '\n';
-            if (executableLines) allowedCode += executableLines.join('\n') + '\n';
+            console.log('Executable Lines after filtering:', executableLines);
 
-            // extract allowed code to be executed
-            allowedCode += allowedObjects.map(object => {
-                const objectRegex = new RegExp(`\\b${object}\\b\\s*=\\s*.*?;`, 'g');
-                const objectMatches = gameCode.match(objectRegex);
-                if (objectMatches) {
-                    return objectMatches.join('\n');
-                } else {
-                    return '';
-                }
-            }).join('\n') + '\n';
+            // add allowed code to allowedCode
+            if (variables) allowedCode += variables.join('\n');
+            if (functions) allowedCode += functions.join('\n');
+            if (executableLines) allowedCode += executableLines.join('\n');
 
             console.log('Executing allowed code:', allowedCode);
             eval(allowedCode);

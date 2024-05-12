@@ -1,8 +1,9 @@
 {
   "name": "Gravity Zones",
   "allowedObjects": [
-    "this.gravityZones.*",
-    "Direction.*"
+    "this.gravityZones.*.direction",
+    "this.gravityZones.*.gravity",
+    "this.gravityZones.*.refresh"
   ],
   "startPosition": {
     "x": 200,
