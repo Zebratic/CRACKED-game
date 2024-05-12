@@ -132,13 +132,11 @@ class GravityZone {
                     const pullForce = map(distance, 0, this.height / 2, 0, this.gravity - player.gravity);
                     const pullVector = pullDirection.mult(pullForce);
                     
-                    if (playerPos.y > center.y) {
+                    if (playerPos.y > center.y)
                         player.velocity.y += pullVector.y * 10
-                    }
-                    else {
+                    else
                         player.velocity.y += pullVector.y * 5;
-                        console.log(player.velocity.y);
-                    }
+                    
                     player.velocity.x += pullVector.x * 3;
 
                     // if closer to center, slow down velocity

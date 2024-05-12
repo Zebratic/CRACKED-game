@@ -1,0 +1,1 @@
+this.gravityZones[0].direction = %{this.gravityZones[0].direction}%;

@@ -1,13 +1,15 @@
 {
-  "name": "Custom Level",
-  "allowedObjects": [],
+  "name": "Moon Jumps",
+  "allowedObjects": [
+    "this.player.gravity"
+  ],
   "startPosition": {
-    "x": 83,
+    "x": 47,
     "y": 680
   },
   "endPosition": {
-    "x": 1737,
-    "y": 558,
+    "x": 1787,
+    "y": 676,
     "width": 15,
     "height": 15,
     "color": {
@@ -45,21 +47,8 @@
       }
     },
     {
-      "x": 256,
-      "y": 673,
-      "width": 100,
-      "height": 20,
-      "collision": true,
-      "color": {
-        "r": 255,
-        "g": 255,
-        "b": 255,
-        "a": 255
-      }
-    },
-    {
-      "x": 400,
-      "y": 643,
+      "x": 555,
+      "y": 700,
       "width": 150,
       "height": 20,
       "collision": true,
@@ -71,21 +60,8 @@
       }
     },
     {
-      "x": 621,
-      "y": 616,
-      "width": 100,
-      "height": 20,
-      "collision": true,
-      "color": {
-        "r": 255,
-        "g": 255,
-        "b": 255,
-        "a": 255
-      }
-    },
-    {
-      "x": 779,
-      "y": 585,
+      "x": 1033,
+      "y": 700,
       "width": 200,
       "height": 20,
       "collision": true,
@@ -97,47 +73,8 @@
       }
     },
     {
-      "x": 1025,
-      "y": 556,
-      "width": 150,
-      "height": 20,
-      "collision": true,
-      "color": {
-        "r": 255,
-        "g": 255,
-        "b": 255,
-        "a": 255
-      }
-    },
-    {
-      "x": 1226,
-      "y": 559,
-      "width": 100,
-      "height": 20,
-      "collision": true,
-      "color": {
-        "r": 255,
-        "g": 255,
-        "b": 255,
-        "a": 255
-      }
-    },
-    {
-      "x": 1366,
-      "y": 564,
-      "width": 150,
-      "height": 20,
-      "collision": true,
-      "color": {
-        "r": 255,
-        "g": 255,
-        "b": 255,
-        "a": 255
-      }
-    },
-    {
-      "x": 1564,
-      "y": 588,
+      "x": 1608,
+      "y": 700,
       "width": 200,
       "height": 20,
       "collision": true,
@@ -161,14 +98,14 @@
   ],
   "labels": [
     {
-      "x": 110,
-      "y": 416,
-      "text": "Use the arrow keys to move\nTry and clear the obstacles\nand reach the green square",
-      "textSize": 32,
+      "x": 13,
+      "y": 446,
+      "text": "There is no way you can jump high enough here.\nHint: Press 'ESC' to open the editor.",
+      "textSize": 28,
       "color": {
-        "r": 255,
+        "r": 251,
         "g": 0,
-        "b": 166
+        "b": 255
       },
       "outline": {
         "r": 0,

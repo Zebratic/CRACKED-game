@@ -59,11 +59,15 @@
                 editorWindow.setAttribute('editor-hidden', 'false');
                 editorWindow.style.opacity = 0;
                 editorWindow.style.transition = 'opacity 0.5s';
+                editorWindow.style.pointerEvents = 'auto'; // enable interaction with the editor
+                window.editor.focus(); // focus the editor
                 setTimeout(() => {
                     editorWindow.style.opacity = 1;
                 }, 100);
             } else {
                 editorWindow.style.opacity = 0;
+                editorWindow.style.pointerEvents = 'none'; // disable interaction with the editor
+                document.activeElement.blur();
                 setTimeout(() => {
                     editorWindow.setAttribute('editor-hidden', 'true');
                 }, 500);

@@ -5,8 +5,10 @@ class Spikes {
         this.width = data.width;
         this.height = data.height;
         this.renderedSpikes = [];
+    }
 
-        // try to fit spikes in the box minimum 10 pixels width, max 20 pixels width, all spikes height is the height of the box
+    draw(debugMode) {
+        this.renderedSpikes = [];
         let spikeCount = Math.floor(this.width / 20);
         let spikeWidth = this.width / spikeCount;
         let spikeHeight = this.height;
@@ -22,12 +24,6 @@ class Spikes {
             this.renderedSpikes.push({ x1, y1, x2, y2, x3, y3 });
             spikeOffset += spikeWidth;
         }
-    }
-
-    draw(debugMode) {
-        // draw red box
-        //fill(255, 0, 0, 150);
-        //rect(this.x, this.y, this.width, this.height);
 
         // draw spikes
         if (this.renderedSpikes && this.renderedSpikes.length > 0) {

@@ -1,35 +1,49 @@
 class Interpreter {
-    constructor(player, levelManager) {
+    constructor(player, levelManager, walls, enemies, gravityZones, spikes, labels, endPosition) {
         this.player = player;
         this.levelManager = levelManager;
+        this.walls = walls;
+        this.enemies = enemies;
+        this.gravityZones = gravityZones;
+        this.spikes = spikes;
+        this.labels = labels;
+        this.endPosition = endPosition;
+        
         this.debugMode = false;
         this.pastObject = false;
         this.objectToWrite = false;
         console.log('Interpreter initialized');
         console.log('Player:', this.player);
         console.log('Level manager:', this.levelManager);
-        
+
         this.errors = [];
     }
 
 
     load(gameCode) {
+        console.log('Updating objects');
+
         console.log('Game code:', gameCode);
         var allowedObjects = this.levelManager.currentLevel.allowedObjects;
 
+        let library = ['console', 'Math'];
 
         try {
-            // dont allow console.log etc. and only interact with allowed objects
             var allowedCode = '';
-            var variables = gameCode.match(/(var|let|const)\s+\w+\s*=\s*.*?;/g);
+            allowedCode += library.map(lib => `var ${lib} = window.${lib};`).join('\n') + '\n';
+            // allow the use of console.log("message"); etc.
 
+            var variables = gameCode.match(/(var|let|const)\s+\w+\s*=\s*.*?;/g);
             var functions = gameCode.match(/function\s+\w+\s*\([^)]*\)\s*\{[^{}]*\}/g);
+            var executableLines = gameCode.match(/[^{};]+;/g);
             console.log('Variables:', variables);
             console.log('Functions:', functions);
+            console.log('Executable Lines:', executableLines);
 
             // declare variables
             if (variables) allowedCode += variables.join('\n') + '\n';
             if (functions) allowedCode += functions.join('\n') + '\n';
+            if (executableLines) allowedCode += executableLines.join('\n') + '\n';
 
             // extract allowed code to be executed
             allowedCode += allowedObjects.map(object => {
@@ -42,7 +56,6 @@ class Interpreter {
                 }
             }).join('\n') + '\n';
 
-            // execute the allowed code
             console.log('Executing allowed code:', allowedCode);
             eval(allowedCode);
 
@@ -64,10 +77,8 @@ class Interpreter {
                 });
             }
             
-
-            this.errors = [];
         } catch (error) {
-            console.error('Error loading game code:', error);
+            console.error('Error executing allowed code:', error);
             this.errors.push(error);
         }
     }

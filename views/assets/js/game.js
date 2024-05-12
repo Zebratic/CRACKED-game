@@ -7,13 +7,14 @@ import Spikes from './spikes.js';
 import Interpreter from './interpreter.js';
 import MusicPlayer from './musicplayer.js';
 import SpeedrunTimer from './speedrun-timer.js';
+import Label from './label.js';
 import EndPosition from './end-position.js';
 import LevelEditor from './level-editor.js';
 
 
 let player = new Player();
 let levelManager = new LevelManager();
-let interpreter = new Interpreter(player, levelManager);
+let interpreter = new Interpreter(player, levelManager, null);
 let musicPlayer = new MusicPlayer();
 let speedrunTimer = new SpeedrunTimer();
 
@@ -24,6 +25,7 @@ let walls = [];
 let enemies = [];
 let gravityZones = [];
 let spikes = [];
+let labels = [];
 let endPosition = null;
 
 let levelEditor = new LevelEditor();
@@ -33,11 +35,16 @@ function loadLevel(levelName) {
     enemies = [];
     gravityZones = [];
     spikes = [];
+    labels = [];
+    endPosition = null;
+
+    levelEditor.currentHeldObject = null;
+    levelEditor.lastSelectedObject = null;
+    levelEditor.heldObjectOffset = { x: 0, y: 0 };
 
     player = new Player();
     player.blocked = true;
-    interpreter = new Interpreter(player, levelManager);
-    window.interpreter = interpreter;
+    
 
     levelManager.loadLevel(levelName).then(level => {
         if (level) {
@@ -46,7 +53,11 @@ function loadLevel(levelName) {
             if (level.enemies) enemies = level.enemies.map(enemyData => new Enemy(enemyData));
             if (level.gravityZones) gravityZones = level.gravityZones.map(zoneData => new GravityZone(zoneData));
             if (level.spikes) spikes = level.spikes.map(spikeData => new Spikes(spikeData));
+            if (level.labels) labels = level.labels.map(labelData => new Label(labelData));
             if (level.endPosition) endPosition = new EndPosition(level.endPosition);
+
+            interpreter = new Interpreter(player, levelManager, walls, enemies, gravityZones, spikes, labels, endPosition);
+            window.interpreter = interpreter;
 
             var script = interpreter.returnLevelScript(level.script);
             editor.setValue(script);
@@ -58,6 +69,8 @@ function loadLevel(levelName) {
                 player.blocked = false;
                 speedrunTimer.start(level.id);
             }, 500);
+
+           
         }
     });
 }
@@ -87,6 +100,8 @@ function OnDeath() {
     console.log('Player died');
     player.position = levelManager.currentLevel.startPosition;
     player.blocked = true;
+    editor.setValue(interpreter.returnLevelScript(levelManager.currentLevel.script));
+    debugMode = false;
     isRestarting = true;
     restartStopwatch = millis();
 }
@@ -150,6 +165,11 @@ function draw() {
         }
     }
 
+    // draw labels
+    for (let label of labels) {
+        label.draw(debugMode);
+    }
+
 
 
     
@@ -200,7 +220,7 @@ function draw() {
         var isEditorOpen = editorWindow.getAttribute('editor-hidden') === 'false';
         interpreter.debugMode = !isEditorOpen;
         if (!isEditorOpen)
-            levelEditor.update(levelEditor, player, walls, enemies, gravityZones, spikes, endPosition);
+            levelEditor.update(levelManager, player, walls, enemies, gravityZones, spikes, labels, endPosition);
     }
 }
 
@@ -209,25 +229,28 @@ function draw() {
 // on key press R, reload the level
 window.addEventListener('keydown', function(event) {
     console.log(event.key);
+    var isEditorOpen = editorWindow.getAttribute('editor-hidden') === 'false';
+
     switch (event.key.toLowerCase()) {
         case 'r':
-            if (!isRestarting) {
+            if (!isRestarting && !isEditorOpen) {
+                debugMode = false;
                 isRestarting = true;
                 restartStopwatch = millis();
             }
             break;
 
         case 'escape': toggleEditor(); break;
-        case 'i': debugMode = !debugMode; break;
-        case 's': levelEditor.saveLevel(); break;
+        case 'home': debugMode = !debugMode; break;
+        case 'end': levelEditor.saveLevel(); break;
         case 'backspace': levelEditor.deleteObject(debugMode); break;
     }
 
-
-    if (event.key === 'r') {
-        if (!isRestarting) {
-            isRestarting = true;
-            restartStopwatch = millis();
+    // if its a number, load the level index
+    if (event.key >= '0' && event.key <= '9' && !isEditorOpen) {
+        var levelIndex = parseInt(event.key);
+        if (levelIndex < levelManager.levelList.length) {
+            loadLevel(levelManager.levelList[levelIndex]);
         }
     }
 });

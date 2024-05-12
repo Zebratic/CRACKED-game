@@ -1,0 +1,113 @@
+{
+  "name": "Black Hole",
+  "allowedObjects": [
+    "this.gravityZones.*"
+  ],
+  "startPosition": {
+    "x": 444,
+    "y": 1060
+  },
+  "endPosition": {
+    "x": 1476,
+    "y": 1050,
+    "width": 15,
+    "height": 15,
+    "color": {
+      "r": 0,
+      "g": 255,
+      "b": 0,
+      "a": 100
+    }
+  },
+  "walls": [
+    {
+      "x": 960,
+      "y": 600,
+      "width": 20,
+      "height": 480,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    },
+    {
+      "x": 0,
+      "y": 540,
+      "width": 1920,
+      "height": 20,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    },
+    {
+      "x": 0,
+      "y": 540,
+      "width": 20,
+      "height": 540,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    },
+    {
+      "x": 1900,
+      "y": 540,
+      "width": 20,
+      "height": 540,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    }
+  ],
+  "enemies": [],
+  "gravityZones": [
+    {
+      "x": 20,
+      "y": 560,
+      "width": 1880,
+      "height": 540,
+      "gravity": 2,
+      "invisible": false,
+      "direction": "down",
+      "ignoreWalls": true,
+      "starDensity": 0.001,
+      "colorIntensity": 255
+    }
+  ],
+  "spikes": [],
+  "labels": [
+    {
+      "x": 156,
+      "y": 936,
+      "text": "Muahaha! You will never escape!",
+      "textSize": 32,
+      "color": {
+        "r": 255,
+        "g": 26,
+        "b": 0
+      },
+      "outline": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 100
+      },
+      "outlineSize": 5,
+      "rainbow": true
+    }
+  ]
+}

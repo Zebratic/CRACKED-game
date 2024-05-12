@@ -1,18 +1,14 @@
 {
     "easy": [
         "tutorial",
-        "easy1",
-        "easy2",
-        "easy3"
+        "moonjumps",
+        "bigwall"
     ],
     "medium": [
-        "medium1",
-        "medium2",
-        "medium3"
+        "fastfeet",
+        "walls"
     ],
     "hard": [
-        "hard1",
-        "hard2",
-        "hard3"
+        "blackhole"
     ]
 }

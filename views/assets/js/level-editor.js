@@ -10,20 +10,22 @@ class LevelEditor {
         this.enemies = [];
         this.gravityZones = [];
         this.spikes = [];
+        this.labels = [];
         this.endPosition = null;
     }
 
-    update(levelManager, player, walls, enemies, gravityZones, spikes, endPosition) {
+    update(levelManager, player, walls, enemies, gravityZones, spikes, labels, endPosition) {
         this.levelManager = levelManager;
         this.player = player;
         this.walls = walls;
         this.enemies = enemies;
         this.gravityZones = gravityZones;
         this.spikes = spikes;
+        this.labels = labels;
         this.endPosition = endPosition;
 
         // collect a list of all objects
-        let objectLists = [this.walls, this.enemies, this.gravityZones, this.spikes, this.endPosition];
+        let objectLists = [this.walls, this.enemies, this.gravityZones, this.spikes, this.labels, this.endPosition];
 
         const allObjects = objectLists.flat();
 
@@ -35,15 +37,16 @@ class LevelEditor {
 
         // loop through all objects
         for (let object of allObjects) {
-            object._draggable = this.calculateDraggability(object);
+            if (object == null) continue;
 
+            let draggable = this.calculateDraggability(object);
 
             // if mouse is let go, stop dragging
             if (!mouseIsPressed && this.currentHeldObject === object) {
                 this.currentHeldObject = null;
             }
 
-            if (object._draggable && mouseIsPressed && this.currentHeldObject === null) {
+            if (draggable && mouseIsPressed && this.currentHeldObject === null) {
                 this.currentHeldObject = object;
                 this.lastSelectedObject = object;
                 this.heldObjectOffset = { x: object.x - mouseX, y: object.y - mouseY };
@@ -64,9 +67,12 @@ class LevelEditor {
 
     // function to calculate draggability based on mouse position
     calculateDraggability(object) {
-        if (mouseX > object.x && mouseX < object.x + object.width && mouseY > object.y && mouseY < object.y + object.height) {
-            return true;
+        if (object != null) {
+            if (mouseX > object.x && mouseX < object.x + object.width && mouseY > object.y && mouseY < object.y + object.height) {
+                return true;
+            }
         }
+
         return false;
     }
 
@@ -109,24 +115,23 @@ class LevelEditor {
             if (this.spikes[index].renderedSpikes) delete this.spikes[index].renderedSpikes;
         }
 
+
         let level = {
-            name: 'Custom Level',
-            allowedObjects: [],
-            startPosition: { x: this.player.x, y: this.player.y },
+            name: this.levelManager.currentLevel.name,
+            allowedObjects: this.levelManager.currentLevel.allowedObjects,
+            startPosition: { x: Math.floor(this.player.position.x), y: Math.floor(this.player.position.y)},
             endPosition: this.endPosition,
             walls: this.walls,
             enemies: this.enemies,
             gravityZones: this.gravityZones,
-            spikes: this.spikes
+            spikes: this.spikes,
+            labels: this.labels
         };
 
-        // remove all _draggable properties
-        for (let key in level) {
-            if (level[key] instanceof Array) {
-                for (let object of level[key]) {
-                    delete object._draggable;
-                }
-            }
+        // remove width and height from labels
+        for (let label of level.labels) {
+            delete label.width;
+            delete label.height;
         }
 
         let levelJSON = JSON.stringify(level, null, 2);
@@ -151,7 +156,7 @@ class LevelEditor {
 
         console.log('Deleting object:', this.lastSelectedObject);
         if (this.lastSelectedObject !== null) {
-            let objectLists = [this.walls, this.enemies, this.gravityZones, this.spikes, this.endPosition];
+            let objectLists = [this.walls, this.enemies, this.gravityZones, this.spikes, this.labels, this.endPosition];
             for (let list of objectLists) {
                 let index = list.indexOf(this.lastSelectedObject);
                 if (index > -1) {

@@ -1,0 +1,139 @@
+{
+  "name": "Walls",
+  "allowedObjects": [
+    "this.walls"
+  ],
+  "startPosition": {
+    "x": 648,
+    "y": 780
+  },
+  "endPosition": {
+    "x": 1366,
+    "y": 768,
+    "width": 15,
+    "height": 15,
+    "color": {
+      "r": 0,
+      "g": 255,
+      "b": 0,
+      "a": 100
+    }
+  },
+  "walls": [
+    {
+      "x": 800,
+      "y": 600,
+      "width": 20,
+      "height": 200,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 100
+      }
+    },
+    {
+      "x": 1000,
+      "y": 600,
+      "width": 20,
+      "height": 200,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 100
+      }
+    },
+    {
+      "x": 1200,
+      "y": 600,
+      "width": 20,
+      "height": 200,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 100
+      }
+    },
+    {
+      "x": 500,
+      "y": 800,
+      "width": 1000,
+      "height": 20,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    },
+    {
+      "x": 500,
+      "y": 600,
+      "width": 1000,
+      "height": 20,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    },
+    {
+      "x": 480,
+      "y": 600,
+      "width": 20,
+      "height": 220,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    },
+    {
+      "x": 1500,
+      "y": 600,
+      "width": 20,
+      "height": 220,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    }
+  ],
+  "enemies": [],
+  "gravityZones": [],
+  "spikes": [],
+  "labels": [
+    {
+      "x": 604,
+      "y": 546,
+      "text": "Now there is no way for you to get past these walls! 😈",
+      "textSize": 32,
+      "color": {
+        "r": 255,
+        "g": 238,
+        "b": 0
+      },
+      "outline": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 100
+      },
+      "outlineSize": 5,
+      "rainbow": true
+    }
+  ]
+}

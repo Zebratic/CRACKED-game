@@ -1,0 +1,61 @@
+{
+  "name": "The Big Wall",
+  "allowedObjects": [
+    "this.walls"
+  ],
+  "startPosition": {
+    "x": 444,
+    "y": 1060
+  },
+  "endPosition": {
+    "x": 1476,
+    "y": 1050,
+    "width": 15,
+    "height": 15,
+    "color": {
+      "r": 0,
+      "g": 255,
+      "b": 0,
+      "a": 100
+    }
+  },
+  "walls": [
+    {
+      "x": 960,
+      "y": 0,
+      "width": 20,
+      "height": 1080,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    }
+  ],
+  "enemies": [],
+  "gravityZones": [],
+  "spikes": [],
+  "labels": [
+    {
+      "x": 156,
+      "y": 936,
+      "text": "Boom! Big wall, now you cant jump over it!",
+      "textSize": 32,
+      "color": {
+        "r": 255,
+        "g": 26,
+        "b": 0
+      },
+      "outline": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 100
+      },
+      "outlineSize": 5,
+      "rainbow": true
+    }
+  ]
+}

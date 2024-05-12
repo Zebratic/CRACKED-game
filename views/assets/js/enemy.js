@@ -10,9 +10,6 @@ class Enemy {
         this.coordinates = data.coordinates;
         this.targetCoordinate = 0;
         this.color = { r: 255, g: 0, b: 0 };
-
-        // create new coordinates to add to the path
-        
     }
 
     move() {

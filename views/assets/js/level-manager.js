@@ -8,6 +8,7 @@ class Level {
         this.enemies = data.enemies;
         this.gravityZones = data.gravityZones;
         this.spikes = data.spikes;
+        this.labels = data.labels;
     }
 }
 
