@@ -17,13 +17,9 @@ class Interpreter {
         this.labels = labels;
         this.endPosition = endPosition;
 
-        
         this.debugMode = false;
         this.pastObject = false;
         this.objectToWrite = false;
-        console.log('Interpreter initialized');
-        console.log('Player:', this.player);
-        console.log('Level manager:', this.levelManager);
 
         this.errors = [];
     }
@@ -40,8 +36,25 @@ class Interpreter {
             var allowedCode = '';
             allowedCode += library.map(lib => `var ${lib} = window.${lib};`).join('\n') + '\n';
 
-            var variables = gameCode.match(/(var|let|const)\s+\w+\s*=\s*.*?;/g);
-            var functions = gameCode.match(/function\s+\w+\s*\([^)]*\)\s*\{[^{}]*\}/g);
+            /*
+            var test = {
+                UP: 0,
+                DOWN: 1,
+                LEFT: 2,
+                RIGHT: 3,
+                CENTER: 4
+            };
+            let wow = 0;
+            
+            this.gravityZones[0].direction = test.UP;
+            */
+             
+            // const, let, var variables also check for multi line declarations
+            var variables = gameCode.match(/(?:const|let|var)\s+\w+\s*=\s*[^;]+;/gs) || [];
+           
+
+
+            var functions = gameCode.match(/function\s+\w+\s*\([^)]*\)\s*\{[^{}]*\}/g) || [];
             var executableLines = gameCode.match(/[^{};]+;/g);
             console.log('Variables:', variables);
             console.log('Functions:', functions);
