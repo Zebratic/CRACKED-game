@@ -15,14 +15,13 @@
 <body>
     <div id="game"></div>
 
-    <div id="editorWindow">
+    <div id="editorWindow" editor-hidden>
         <div id="editorHeader" class="cursor-move">Editor Window</div>
         <div id="editor"></div>
     </div>
 
     <script type="module" src="./assets/js/game.js"></script>
     <script>
-        // Make the editor window draggable
         var editorWindow = document.getElementById('editorWindow');
         var editorHeader = document.getElementById('editorHeader');
         let isDragging = false;
@@ -38,8 +37,8 @@
 
         function startDrag(event) {
             isDragging = true;
-            dragOffsetX = event.clientX - editorWindow.offsetLeft;
-            dragOffsetY = event.clientY - editorWindow.offsetTop;
+            dragOffsetX = event.clientX - editorWindow.offsetLeft + 15;
+            dragOffsetY = event.clientY - editorWindow.offsetTop + 15;
         }
 
         function stopDrag() {
@@ -55,13 +54,20 @@
 
         function toggleEditor() {
             editorWindow = document.getElementById('editorWindow');
-            editorWindow.style.transition = 'opacity 0.5s';
-            editorWindow.style.opacity = editorWindow.style.opacity === '0' ? '1' : '0';
-
-            // after the transition ends, set the display property to none'
-            setTimeout(() => {
-                editorWindow.style.display = editorWindow.style.display === 'none' ? 'block' : 'none';
-            }, (editorWindow.style.opacity === '0' ? 500 : 0));
+            // if its visible, fade it out, else fade it in
+            if (editorWindow.getAttribute('editor-hidden') === 'true') {
+                editorWindow.setAttribute('editor-hidden', 'false');
+                editorWindow.style.opacity = 0;
+                editorWindow.style.transition = 'opacity 0.5s';
+                setTimeout(() => {
+                    editorWindow.style.opacity = 1;
+                }, 100);
+            } else {
+                editorWindow.style.opacity = 0;
+                setTimeout(() => {
+                    editorWindow.setAttribute('editor-hidden', 'true');
+                }, 500);
+            }
         }
 
         require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs' }});
@@ -72,14 +78,13 @@
                 theme: 'vs-dark'
             });
 
-            // hide the editor window by default
-            toggleEditor();
-
             editor.onDidChangeModelContent(() => {
                 gameCode = editor.getValue();
                 interpreter.load(gameCode);
             });
         });
+
+        toggleEditor();
     </script>
 </body>
 

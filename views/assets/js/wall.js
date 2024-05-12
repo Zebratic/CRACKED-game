@@ -1,22 +1,22 @@
 class Wall {
-    constructor(x, y, w, h, collision = true, color = { r: 255, g: 255, b: 255 }) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.collision = collision;
-        this.color = color;
+    constructor(data) {
+        this.x = data.x;
+        this.y = data.y;
+        this.width = data.width;
+        this.height = data.height;
+        this.collision = data.collision !== undefined ? data.collision : true;
+        this.color = data.color || { r: 255, g: 255, b: 255, a: 255 };
     }
 
-    draw(label = null) {
-        fill(this.color.r, this.color.g, this.color.b);
-        rect(this.x, this.y, this.w, this.h);
+    draw(debugMode) {
+        fill(this.color.r, this.color.g, this.color.b, this.color.a);
+        rect(this.x, this.y, this.width, this.height);
 
-        if (label) {
+        if (debugMode) {
             textAlign(CENTER, CENTER);
             textSize(16);
             fill((Math.sin(frameCount / 10) + 1) * 127, (Math.sin(frameCount / 10 + 2) + 1) * 127, (Math.sin(frameCount / 10 + 4) + 1) * 127);
-            text(label, this.x + this.w / 2, this.y + this.h / 2);
+            text(this.x + 'x' + this.y, this.x + this.width / 2, this.y + this.height / 2);
         }
     }
 }

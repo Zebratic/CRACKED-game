@@ -1,6 +1,7 @@
 class MusicPlayer {
     constructor() {
         this.audio = new Audio();
+        this.audio.volume = 0.1;
     }
 
     load(url) {

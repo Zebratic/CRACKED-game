@@ -3,6 +3,7 @@ import LevelManager from './level-manager.js';
 import Player from './player.js';
 import Enemy from './enemy.js';
 import GravityZone from './gravity-zone.js';
+import Spikes from './spikes.js';
 import Interpreter from './interpreter.js';
 import MusicPlayer from './musicplayer.js';
 import SpeedrunTimer from './speedrun-timer.js';
@@ -20,11 +21,13 @@ levelManager.levelList = await levelManager.getLevelList();
 let walls = [];
 let enemies = [];
 let gravityZones = [];
+let spikes = [];
 
 function loadLevel(levelName) {
     walls = [];
     enemies = [];
     gravityZones = [];
+    spikes = [];
 
     player = new Player();
     player.blocked = true;
@@ -34,21 +37,14 @@ function loadLevel(levelName) {
     levelManager.loadLevel(levelName).then(level => {
         if (level) {
             player.position = level.startPosition;
-            if (level.walls)
-                walls = level.walls.map(wallData => new Wall(wallData.x, wallData.y, wallData.width, wallData.height));
-
-            if (level.enemies)
-                enemies = level.enemies.map(enemyData => new Enemy(enemyData));
-
-            if (level.gravityZones)
-                gravityZones = level.gravityZones.map(zoneData => new GravityZone(zoneData));
-
+            if (level.walls) walls = level.walls.map(wallData => new Wall(wallData));
+            if (level.enemies) enemies = level.enemies.map(enemyData => new Enemy(enemyData));
+            if (level.gravityZones) gravityZones = level.gravityZones.map(zoneData => new GravityZone(zoneData));
+            if (level.spikes) spikes = level.spikes.map(spikeData => new Spikes(spikeData));
+            if (level.endPosition) walls.push(new Wall(level.endPosition));
 
             var script = interpreter.returnLevelScript(level.script);
             editor.setValue(script);
-
-            // add wall with no collision to indicate the end of the level
-            walls.push(new Wall(level.endPosition.x, level.endPosition.y, 15, 15, false, { r: 0, g: 255, b: 0 }));
 
             // reset speedrun timer
             speedrunTimer.reset();
@@ -57,12 +53,12 @@ function loadLevel(levelName) {
                 player.blocked = false;
                 speedrunTimer.start(level.id);
             }, 500);
-
         }
     });
 }
 
 var debugMode = false;
+var editorMode = false;
 var musicStarted = false;
 
 var isRestarting = false;
@@ -70,7 +66,7 @@ var isLevelLoaded = false;
 var restartStopwatch = 0;
 
 function setup() {
-    createCanvas(1920, 1000).parent('game');
+    createCanvas(1920, 1080).parent('game');
     loadLevel(levelManager.levelList[0]);
 
     // on any mouse click, play the music
@@ -83,55 +79,47 @@ function setup() {
     });
 }
 
+function OnDeath() {
+    console.log('Player died');
+    player.position = levelManager.currentLevel.startPosition;
+    player.blocked = true;
+    isRestarting = true;
+    restartStopwatch = millis();
+}
 
 function draw() {
     // ============= GAME LOOP =============
     background(30, 30, 30);
     player.update(walls);
-    player.draw(debugMode);
+    player.draw();
+
+    // draw spikes
+    for (let spike of spikes) {
+        spike.draw(debugMode);
+        if (spike.checkForCollision(player))
+            OnDeath();
+    }
 
     // draw walls
     for (let wall of walls) {
-        wall.draw((debugMode ? '#' + (walls.indexOf(wall) + 1) + ' x: ' + wall.x + ', y: ' + wall.y : null));
+        wall.draw(debugMode);
     }
-
-    // draw gravity zones
-    for (let zone of gravityZones) {
-        zone.applyGravity(player);
-        zone.update();
-        zone.draw(debugMode);
-    }
-
+   
     // draw enemies
     for (let enemy of enemies) {
         enemy.move();
-        enemy.draw();
+        enemy.draw(debugMode);
+        if (enemy.checkForCollision(player))
+            OnDeath();
     }
 
-    // check for player-enemy collision
-    for (let enemy of enemies) {
-        // draw hitbox
-        if (debugMode) {
-            fill(255, 0, 0, 100);
-            rect(enemy.x - (enemy.size / 2), enemy.y - (enemy.size / 2), enemy.size, enemy.size);
-        }
-        if (player.position.x + player.width > enemy.x - (enemy.size / 2) &&
-            player.position.x < enemy.x + (enemy.size / 2) &&
-            player.position.y + player.height > enemy.y - (enemy.size / 2) &&
-            player.position.y < enemy.y + (enemy.size / 2)) {
-           
-            console.log('Player died');
-            player.position = levelManager.currentLevel.startPosition;
-            player.blocked = true;
-
-            // restart level
-            isRestarting = true;
-            restartStopwatch = millis();
-        }   
+     // draw gravity zones
+     for (let zone of gravityZones) {
+        zone.applyGravity(player, debugMode);
+        zone.update();
+        zone.draw(debugMode);
     }
-
-
-
+   
 
 
     // ============= LEVEL COMPLETION =============
@@ -204,6 +192,16 @@ function draw() {
     speedrunTimer.update();
     speedrunTimer.draw();
     // =========================================
+
+    if (debugMode)
+        player.drawDebug();
+
+    if (editorMode)
+    {
+        // show download json button for level data
+        downloadButton.position(10, 70);
+
+    }
 }
 
 
@@ -218,13 +216,10 @@ window.addEventListener('keydown', function(event) {
             }
             break;
 
-        case 'escape':
-            toggleEditor();
-            break;
+        case 'escape': toggleEditor(); break;
+        case 'i': debugMode = !debugMode; break;
 
-        case 'i':
-            debugMode = !debugMode;
-            break;
+        
     }
 
 

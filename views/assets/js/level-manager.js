@@ -1,19 +1,13 @@
-import Enemy from './enemy.js';
-
 class Level {
     constructor(data) {
         this.name = data.name;
         this.allowedObjects = data.allowedObjects || [];
         this.startPosition = createVector(data.startPosition.x, data.startPosition.y);
         this.endPosition = createVector(data.endPosition.x, data.endPosition.y);
-        this.walls = data.walls.map(wallData => ({
-            x: wallData.x,
-            y: wallData.y,
-            width: wallData.width,
-            height: wallData.height
-        }));
+        this.walls = data.walls;
         this.enemies = data.enemies;
         this.gravityZones = data.gravityZones;
+        this.spikes = data.spikes;
     }
 }
 

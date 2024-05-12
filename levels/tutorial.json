@@ -1,74 +1,108 @@
 {
-  "name": "Tutorial Level",
+  "name": "Parkour Training",
   "allowedObjects": [
+    "this.player.jump",
     "this.player.gravity"
   ],
   "startPosition": {
-    "x": 50,
-    "y": 300
+    "x": 100,
+    "y": 680
   },
   "endPosition": {
-    "x": 650,
-    "y": 150
+    "x": 0,
+    "y": 1000,
+    "width": 15,
+    "height": 15,
+    "color": { "r": 0, "g": 255, "b": 0, "a": 100 }
   },
   "walls": [
     {
       "x": 0,
-      "y": 320,
+      "y": 1000,
+      "width": 1920,
+      "height": 80,
+      "color": { "r": 100, "g": 100, "b": 100, "a": 100 }
+    },
+    {
+      "x": 0,
+      "y": 700,
+      "width": 200,
+      "height": 20
+    },
+    {
+      "x": 300,
+      "y": 650,
+      "width": 100,
+      "height": 20
+    },
+    {
+      "x": 500,
+      "y": 600,
       "width": 150,
       "height": 20
     },
     {
-      "x": 200,
-      "y": 280,
+      "x": 700,
+      "y": 550,
       "width": 100,
       "height": 20
     },
     {
-      "x": 400,
-      "y": 240,
+      "x": 850,
+      "y": 500,
+      "width": 200,
+      "height": 20
+    },
+    {
+      "x": 1100,
+      "y": 450,
+      "width": 150,
+      "height": 20
+    },
+    {
+      "x": 1300,
+      "y": 400,
       "width": 100,
       "height": 20
     },
     {
-      "x": 600,
-      "y": 200,
-      "width": 100,
+      "x": 1500,
+      "y": 350,
+      "width": 150,
+      "height": 20
+    },
+    {
+      "x": 1700,
+      "y": 300,
+      "width": 200,
       "height": 20
     }
   ],
   "enemies": [
     {
       "type": "saw",
-      "x": 150,
-      "y": 300,
-      "size": 50,
-      "speed": 1,
+      "x": 510,
+      "y": 500,
+      "size": 40,
+      "speed": 2,
+      "pathVisible": true,
+      "visible": true,
       "coordinates": [
         {
-          "x": 150,
-          "y": 300
+          "x": 510,
+          "y": 500
         },
         {
-          "x": 200,
-          "y": 300
-        }
-      ]
-    },
-    {
-      "type": "saw",
-      "x": 300,
-      "y": 260,
-      "size": 20,
-      "speed": 1,
-      "coordinates": [
-        {
-          "x": 300,
-          "y": 260
+          "x": 510,
+          "y": 700
         },
         {
-          "x": 400,
-          "y": 260
+          "x": 640,
+          "y": 700
+        },
+        {
+          "x": 640,
+          "y": 500
         }
       ]
     }
@@ -76,10 +110,58 @@
   "gravityZones": [
     {
       "x": 150,
-      "y": 0,
-      "width": 300,
-      "height": 350,
-      "gravity": -0.5
+      "y": 300,
+      "width": 500,
+      "height": 500,
+      "gravity": 1,
+      "direction": "up"
+    },
+    {
+      "x": 0,
+      "y": 200,
+      "width": 600,
+      "height": 600,
+      "gravity": 0.1,
+      "direction": "left",
+      "ignoreWalls": true
+    },
+    {
+      "x": 850,
+      "y": 200,
+      "width": 500,
+      "height": 300,
+      "gravity": 1,
+      "direction": "right",
+      "ignoreWalls": true
+    },
+    {
+      "x": 850,
+      "y": 200,
+      "width": 500,
+      "height": 300,
+      "gravity": 1,
+      "direction": "up",
+      "ignoreWalls": true
+    }
+  ],
+  "spikes": [
+    {
+      "x": 0,
+      "y": 950,
+      "width": 1920,
+      "height": 50
+    },
+    {
+      "x": 300,
+      "y": 630,
+      "width": 100,
+      "height": 20
+    },
+    {
+      "x": 1100,
+      "y": 430,
+      "width": 150,
+      "height": 20
     }
   ]
 }
