@@ -3,7 +3,7 @@ class Level {
         this.name = data.name;
         this.allowedObjects = data.allowedObjects || [];
         this.startPosition = createVector(data.startPosition.x, data.startPosition.y);
-        this.endPosition = createVector(data.endPosition.x, data.endPosition.y);
+        this.endPosition = data.endPosition;
         this.walls = data.walls;
         this.enemies = data.enemies;
         this.gravityZones = data.gravityZones;

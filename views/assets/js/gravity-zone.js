@@ -36,53 +36,64 @@ class GravityZone {
     }
 
     update() {
-        for (let star of this.stars) {
-            // based on direction, move stars
-            switch (this.direction) {
-                case Direction.UP:
-                    star.y -= this.gravity * 5;
-                    if (star.y < this.y) star.y = this.y + this.height;
-                    break;
-
-                case Direction.DOWN:
-                    star.y += this.gravity * 5;
-                    if (star.y > this.y + this.height) star.y = this.y;
-                    break;
-
-                case Direction.LEFT:
-                    star.x -= this.gravity * 5;
-                    if (star.x < this.x) star.x = this.x + this.width;
-                    break;
-
-                case Direction.RIGHT:
-                    star.x += this.gravity * 5;
-                    if (star.x > this.x + this.width) star.x = this.x;
-                    break;
-
-                case Direction.CENTER:
-                    const center = createVector(this.x + this.width / 2, this.y + this.height / 2);
-                    const starPos = createVector(star.x, star.y);
-                    const direction = p5.Vector.sub(center, starPos).normalize();
-                    star.x += direction.x;
-                    star.y += direction.y;
-                    if (starPos.dist(center) < 10) {
-                        star.x = this.x + random(this.width);
-                        star.y = this.y + random(this.height);
-                    }
-                    break;
+        if (this.stars && this.stars.length > 0) {
+            for (let star of this.stars) {
+                // based on direction, move stars
+                switch (this.direction) {
+                    case Direction.UP:
+                        star.y -= this.gravity * 5;
+                        if (star.y < this.y) star.y = this.y + this.height;
+                        break;
+        
+                    case Direction.DOWN:
+                        star.y += this.gravity * 5;
+                        if (star.y > this.y + this.height) star.y = this.y;
+                        break;
+        
+                    case Direction.LEFT:
+                        star.x -= this.gravity * 5;
+                        if (star.x < this.x) star.x = this.x + this.width;
+                        break;
+        
+                    case Direction.RIGHT:
+                        star.x += this.gravity * 5;
+                        if (star.x > this.x + this.width) star.x = this.x;
+                        break;
+        
+                    case Direction.CENTER:
+                        const center = createVector(this.x + this.width / 2, this.y + this.height / 2);
+                        const starPos = createVector(star.x, star.y);
+                        const direction = p5.Vector.sub(center, starPos).normalize();
+                        star.x += direction.x * this.gravity * 5;
+                        star.y += direction.y * this.gravity * 5;
+                        if (starPos.dist(center) < 10) {
+                            star.x = this.x + random(this.width);
+                            star.y = this.y + random(this.height);
+                        }
+                        break;
+                }
+        
+                // Check bounds and adjust star position
+                if (star.x < this.x) star.x = this.x + this.width;
+                if (star.x > this.x + this.width) star.x = this.x;
+                if (star.y < this.y) star.y = this.y + this.height;
+                if (star.y > this.y + this.height) star.y = this.y;
             }
         }
     }
+    
 
     draw(debugMode) {
         // blue stars randomly placed
-        for (let star of this.stars) {
-            const colorIntensity = map(this.gravity, -2, 2, 0, 255);
-            const finalColor = lerpColor(color(0, 0, 255), color(255, 0, 0), colorIntensity / 255);
-    
-            fill(finalColor);
-            noStroke();
-            ellipse(star.x, star.y, star.size);
+        if (this.stars && this.stars.length > 0) {
+            for (let star of this.stars) {
+                const colorIntensity = map(this.gravity, -2, 2, 0, 255);
+                const finalColor = lerpColor(color(0, 0, 255), color(255, 0, 0), colorIntensity / 255);
+        
+                fill(finalColor);
+                noStroke();
+                ellipse(star.x, star.y, star.size);
+            }
         }
 
         if (debugMode) {
@@ -116,25 +127,15 @@ class GravityZone {
                     const playerPos = createVector(player.position.x + player.width / 2, player.position.y + player.height / 2);
                     const pullDirection = p5.Vector.sub(center, playerPos).normalize();
 
-                    
-                    // draw line of direction
-                    if (debugMode) {
-                        stroke(255, 0, 0);
-                        line(playerPos.x, playerPos.y, playerPos.x + pullDirection.x * 100, playerPos.y + pullDirection.y * 100);
-                        noStroke();
-                    }
-
                     // pull player towards center, if below center push up, so in the end, the player will be stationary in the center (use player.position.x and player.position.y)
                     const distance = playerPos.dist(center);
                     const pullForce = map(distance, 0, this.height / 2, 0, this.gravity - player.gravity);
                     const pullVector = pullDirection.mult(pullForce);
                     
                     if (playerPos.y > center.y) {
-                        console.log('pulling up');
                         player.velocity.y += pullVector.y * 10
                     }
                     else {
-                        console.log('pulling down');
                         player.velocity.y += pullVector.y * 5;
                         console.log(player.velocity.y);
                     }

@@ -30,13 +30,15 @@ class Spikes {
         //rect(this.x, this.y, this.width, this.height);
 
         // draw spikes
-        for (let spike of this.renderedSpikes) {
-            fill(255, 0, 0);
-            stroke(0);
-            triangle(spike.x1, spike.y1, spike.x2, spike.y2, spike.x3, spike.y3);
-            noStroke();
+        if (this.renderedSpikes && this.renderedSpikes.length > 0) {
+            for (let spike of this.renderedSpikes) {
+                fill(255, 0, 0);
+                stroke(0);
+                triangle(spike.x1, spike.y1, spike.x2, spike.y2, spike.x3, spike.y3);
+                noStroke();
+            }
         }
-
+        
 
         if (debugMode) {
             fill(255, 0, 0, 100);

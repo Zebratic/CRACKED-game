@@ -7,6 +7,8 @@ import Spikes from './spikes.js';
 import Interpreter from './interpreter.js';
 import MusicPlayer from './musicplayer.js';
 import SpeedrunTimer from './speedrun-timer.js';
+import EndPosition from './end-position.js';
+import LevelEditor from './level-editor.js';
 
 
 let player = new Player();
@@ -22,6 +24,9 @@ let walls = [];
 let enemies = [];
 let gravityZones = [];
 let spikes = [];
+let endPosition = null;
+
+let levelEditor = new LevelEditor();
 
 function loadLevel(levelName) {
     walls = [];
@@ -41,7 +46,7 @@ function loadLevel(levelName) {
             if (level.enemies) enemies = level.enemies.map(enemyData => new Enemy(enemyData));
             if (level.gravityZones) gravityZones = level.gravityZones.map(zoneData => new GravityZone(zoneData));
             if (level.spikes) spikes = level.spikes.map(spikeData => new Spikes(spikeData));
-            if (level.endPosition) walls.push(new Wall(level.endPosition));
+            if (level.endPosition) endPosition = new EndPosition(level.endPosition);
 
             var script = interpreter.returnLevelScript(level.script);
             editor.setValue(script);
@@ -58,7 +63,6 @@ function loadLevel(levelName) {
 }
 
 var debugMode = false;
-var editorMode = false;
 var musicStarted = false;
 
 var isRestarting = false;
@@ -119,16 +123,12 @@ function draw() {
         zone.update();
         zone.draw(debugMode);
     }
-   
 
+    // draw end position
+    if (endPosition) {
+        endPosition.draw();
 
-    // ============= LEVEL COMPLETION =============
-    if (levelManager.currentLevel && levelManager.currentLevel.endPosition) {
-        if (player.position.x + player.width > levelManager.currentLevel.endPosition.x &&
-            player.position.x < levelManager.currentLevel.endPosition.x + 15 &&
-            player.position.y + player.height > levelManager.currentLevel.endPosition.y &&
-            player.position.y < levelManager.currentLevel.endPosition.y + 15) {
-            
+        if (endPosition.checkForCollision(player)) {
             // stop speedrun timer
             speedrunTimer.stop();
             speedrunTimer.saveHighscore(levelManager.currentLevel.id);
@@ -149,9 +149,8 @@ function draw() {
                 console.log('All levels completed');
         }
     }
-    // =====================================
 
-    
+
 
     
     // ============= RESTART ANIMATION =============
@@ -194,13 +193,14 @@ function draw() {
     // =========================================
 
     if (debugMode)
+    {
         player.drawDebug();
 
-    if (editorMode)
-    {
-        // show download json button for level data
-        downloadButton.position(10, 70);
-
+        // if editor is open, update it
+        var isEditorOpen = editorWindow.getAttribute('editor-hidden') === 'false';
+        interpreter.debugMode = !isEditorOpen;
+        if (!isEditorOpen)
+            levelEditor.update(levelEditor, player, walls, enemies, gravityZones, spikes, endPosition);
     }
 }
 
@@ -208,6 +208,7 @@ function draw() {
 
 // on key press R, reload the level
 window.addEventListener('keydown', function(event) {
+    console.log(event.key);
     switch (event.key.toLowerCase()) {
         case 'r':
             if (!isRestarting) {
@@ -218,8 +219,8 @@ window.addEventListener('keydown', function(event) {
 
         case 'escape': toggleEditor(); break;
         case 'i': debugMode = !debugMode; break;
-
-        
+        case 's': levelEditor.saveLevel(); break;
+        case 'backspace': levelEditor.deleteObject(debugMode); break;
     }
 
 
