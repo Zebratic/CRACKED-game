@@ -1,3 +1,11 @@
+const Direction = {
+    UP: 0,
+    DOWN: 1,
+    LEFT: 2,
+    RIGHT: 3,
+    CENTER: 4
+};
+
 class Interpreter {
     constructor(player, levelManager, walls, enemies, gravityZones, spikes, labels, endPosition) {
         this.player = player;
@@ -8,6 +16,7 @@ class Interpreter {
         this.spikes = spikes;
         this.labels = labels;
         this.endPosition = endPosition;
+
         
         this.debugMode = false;
         this.pastObject = false;
@@ -23,7 +32,6 @@ class Interpreter {
     load(gameCode) {
         console.log('Updating objects');
 
-        console.log('Game code:', gameCode);
         var allowedObjects = this.levelManager.currentLevel.allowedObjects;
 
         let library = ['console', 'Math'];
@@ -31,7 +39,6 @@ class Interpreter {
         try {
             var allowedCode = '';
             allowedCode += library.map(lib => `var ${lib} = window.${lib};`).join('\n') + '\n';
-            // allow the use of console.log("message"); etc.
 
             var variables = gameCode.match(/(var|let|const)\s+\w+\s*=\s*.*?;/g);
             var functions = gameCode.match(/function\s+\w+\s*\([^)]*\)\s*\{[^{}]*\}/g);
@@ -39,6 +46,19 @@ class Interpreter {
             console.log('Variables:', variables);
             console.log('Functions:', functions);
             console.log('Executable Lines:', executableLines);
+
+            // go through executable lines and check if variable is allowed
+            if (executableLines) {
+                executableLines = executableLines.filter(line => {
+                    var variable = line.match(/\b\w+\b/);
+                    if (variable && allowedObjects.includes(variable[0])) {
+                        return true;
+                    } else {
+                        console.log('Variable not allowed:', variable);
+                        return false;
+                    }
+                });
+            }
 
             // declare variables
             if (variables) allowedCode += variables.join('\n') + '\n';

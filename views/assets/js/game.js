@@ -10,6 +10,8 @@ import SpeedrunTimer from './speedrun-timer.js';
 import Label from './label.js';
 import EndPosition from './end-position.js';
 import LevelEditor from './level-editor.js';
+import Direction from './directions.js';
+
 
 
 let player = new Player();
@@ -109,8 +111,18 @@ function OnDeath() {
 function draw() {
     // ============= GAME LOOP =============
     background(30, 30, 30);
+
+    // draw gravity zones
+    for (let zone of gravityZones) {
+        zone.applyGravity(player, debugMode);
+        zone.update();
+        zone.draw(debugMode);
+    }
+
+    // update player
     player.update(walls);
     player.draw();
+    
 
     // draw spikes
     for (let spike of spikes) {
@@ -130,13 +142,6 @@ function draw() {
         enemy.draw(debugMode);
         if (enemy.checkForCollision(player))
             OnDeath();
-    }
-
-     // draw gravity zones
-     for (let zone of gravityZones) {
-        zone.applyGravity(player, debugMode);
-        zone.update();
-        zone.draw(debugMode);
     }
 
     // draw end position
@@ -248,8 +253,10 @@ window.addEventListener('keydown', function(event) {
 
     // if its a number, load the level index
     if (event.key >= '0' && event.key <= '9' && !isEditorOpen) {
-        var levelIndex = parseInt(event.key);
+        var levelIndex = parseInt(event.key)
+        levelIndex = levelIndex === 0 ? 9 : levelIndex - 1;
         if (levelIndex < levelManager.levelList.length) {
+            console.log('Loading level index', levelIndex);
             loadLevel(levelManager.levelList[levelIndex]);
         }
     }

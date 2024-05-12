@@ -1,0 +1,1 @@
+this.gravityZones[0].direction = Direction.UP;

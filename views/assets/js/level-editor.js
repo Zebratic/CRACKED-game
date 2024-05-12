@@ -110,9 +110,9 @@ class LevelEditor {
 
         // remove renderedSpikes
         for (let spike of this.spikes) {
-            console.log(spike);
             let index = this.spikes.indexOf(spike);
-            if (this.spikes[index].renderedSpikes) delete this.spikes[index].renderedSpikes;
+            if (this.spikes[index].renderedSpikes)
+                delete this.spikes[index].renderedSpikes;
         }
 
 

@@ -6,9 +6,9 @@
     ],
     "medium": [
         "fastfeet",
-        "walls"
+        "walls",
+        "gravityzones"
     ],
     "hard": [
-        "blackhole"
     ]
 }

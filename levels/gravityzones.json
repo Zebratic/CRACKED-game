@@ -1,10 +1,11 @@
 {
-  "name": "Black Hole",
+  "name": "Gravity Zones",
   "allowedObjects": [
-    "this.gravityZones.*"
+    "this.gravityZones.*",
+    "Direction.*"
   ],
   "startPosition": {
-    "x": 444,
+    "x": 200,
     "y": 1060
   },
   "endPosition": {
@@ -21,10 +22,49 @@
   },
   "walls": [
     {
-      "x": 960,
-      "y": 600,
+      "x": 500,
+      "y": 800,
       "width": 20,
-      "height": 480,
+      "height": 250,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    },
+    {
+      "x": 800,
+      "y": 830,
+      "width": 20,
+      "height": 250,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    },
+    {
+      "x": 1100,
+      "y": 800,
+      "width": 20,
+      "height": 250,
+      "collision": true,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 255
+      }
+    },
+    {
+      "x": 1400,
+      "y": 830,
+      "width": 20,
+      "height": 250,
       "collision": true,
       "color": {
         "r": 255,
@@ -35,35 +75,9 @@
     },
     {
       "x": 0,
-      "y": 540,
+      "y": 780,
       "width": 1920,
       "height": 20,
-      "collision": true,
-      "color": {
-        "r": 255,
-        "g": 255,
-        "b": 255,
-        "a": 255
-      }
-    },
-    {
-      "x": 0,
-      "y": 540,
-      "width": 20,
-      "height": 540,
-      "collision": true,
-      "color": {
-        "r": 255,
-        "g": 255,
-        "b": 255,
-        "a": 255
-      }
-    },
-    {
-      "x": 1900,
-      "y": 540,
-      "width": 20,
-      "height": 540,
       "collision": true,
       "color": {
         "r": 255,
@@ -76,10 +90,10 @@
   "enemies": [],
   "gravityZones": [
     {
-      "x": 20,
-      "y": 560,
-      "width": 1880,
-      "height": 540,
+      "x": 0,
+      "y": 800,
+      "width": 1920,
+      "height": 280,
       "gravity": 2,
       "invisible": false,
       "direction": "down",
@@ -91,9 +105,9 @@
   "spikes": [],
   "labels": [
     {
-      "x": 156,
-      "y": 936,
-      "text": "Muahaha! You will never escape!",
+      "x": 750,
+      "y": 500,
+      "text": "Muahaha! You will never escape!\nThis Gravity Zone will keep you away!",
       "textSize": 32,
       "color": {
         "r": 255,
