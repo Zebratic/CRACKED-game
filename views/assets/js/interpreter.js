@@ -38,6 +38,21 @@ class Interpreter {
             console.log('Functions:', functions);
             console.log('Executable Lines:', executableLines);
 
+            // remove comments such as // and /* */
+            variables = variables.map(variable => variable.replace(/\/\/.*|\/\*[^]*?\*\//g, ''));
+            functions = functions.map(func => func.replace(/\/\/.*|\/\*[^]*?\*\//g, ''));
+            executableLines = executableLines.map(line => line.replace(/\/\/.*|\/\*[^]*?\*\//g, ''));
+            console.log('Variables after removing comments:', variables);
+            console.log('Functions after removing comments:', functions);
+            console.log('Executable Lines after removing comments:', executableLines);
+
+            // if any lines have single /* or */ then remove them
+            variables = variables.map(variable => variable.replace(/\/\*|\/\*/g, ''));
+            functions = functions.map(func => func.replace(/\/\*|\/\*/g, ''));
+            executableLines = executableLines.map(line => line.replace(/\/\*|\/\*/g, ''));
+            
+
+
             // go through executable lines and check if line matches allowed objects regex
             if (executableLines) {
                 executableLines = executableLines.filter(line => {
@@ -49,6 +64,8 @@ class Interpreter {
             }
 
             console.log('Executable Lines after filtering:', executableLines);
+
+            
 
             // add allowed code to allowedCode
             if (variables) allowedCode += variables.join('\n');
