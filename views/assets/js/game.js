@@ -210,6 +210,8 @@ function draw() {
     text('Press R to restart', 10, 10);
     text('Press ESC to toggle editor', 10, 30);
     text('Press I to toggle debug info', 10, 50);
+    if (debugMode)
+        text('Press S to save level', 10, 70);
 
     // draw level name
     if (levelManager.currentLevel)
@@ -251,8 +253,8 @@ window.addEventListener('keydown', function(event) {
             break;
 
         case 'escape': toggleEditor(); break;
-        case 'home': debugMode = !debugMode; break;
-        case 'end': levelEditor.saveLevel(); break;
+        case 'i': if (!isEditorOpen) debugMode = !debugMode; break;
+        case 's': if (!isEditorOpen) levelEditor.saveLevel(); break;
         case 'backspace': levelEditor.deleteObject(debugMode); break;
     }
 
