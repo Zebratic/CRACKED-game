@@ -3,7 +3,7 @@ const app = express()
 const dotenv = require('dotenv')
 dotenv.config()
 
-const webserver = require('./webserver');
+const webserver = require('./webserver.js');
 webserver.setupWebserver(app);
 
 app.listen(process.env.PORT, () => {
