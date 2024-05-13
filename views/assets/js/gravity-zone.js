@@ -13,8 +13,8 @@ class GravityZone {
         this.ignoreWalls = data.ignoreWalls === undefined ? false : data.ignoreWalls;
         this.invisible = data.invisible === undefined ? false : data.invisible;
 
-        this.starDensity = 0.001;
-        this.colorIntensity = 255;
+        this.starDensity = data.starDensity || 0.0001;
+        this.colorIntensity = data.colorIntensity || 255;
         this.stars = [];
 
         if (!this.invisible) {
@@ -67,18 +67,22 @@ class GravityZone {
                         const direction = p5.Vector.sub(center, starPos).normalize();
                         star.x += direction.x * this.gravity * 5;
                         star.y += direction.y * this.gravity * 5;
-                        if (starPos.dist(center) < 10) {
+                        
+                        const nextPos = createVector(star.x + direction.x * this.gravity * 5, star.y + direction.y * this.gravity * 5);
+                        const nextDistance = nextPos.dist(center);
+
+                        // reset star position if it overshoots the center
+                        if (nextDistance > starPos.dist(center) && this.gravity > 0) {
                             star.x = this.x + random(this.width);
                             star.y = this.y + random(this.height);
+                        } // reset star position if it's out of bounds
+                        else if (starPos.x < this.x || starPos.x > this.x + this.width || starPos.y < this.y || starPos.y > this.y + this.height) {
+                            star.x = this.x + this.width / 2 + random(-10, 10);
+                            star.y = this.y + this.height / 2 + random(-10, 10);
                         }
+
                         break;
                 }
-        
-                // Check bounds and adjust star position
-                if (star.x < this.x) star.x = this.x + this.width;
-                if (star.x > this.x + this.width) star.x = this.x;
-                if (star.y < this.y) star.y = this.y + this.height;
-                if (star.y > this.y + this.height) star.y = this.y;
             }
         }
     }
@@ -142,7 +146,6 @@ class GravityZone {
 
                     // if closer to center, slow down velocity
                     player.velocity.y *= distance < 10 ? 0.9 : 1;
-               
                    
                     break;
             }

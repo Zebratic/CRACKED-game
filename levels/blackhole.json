@@ -1,0 +1,98 @@
+{
+  "name": "Black Hole",
+  "allowedObjects": [
+    "this.gravityZones.*"
+  ],
+  "startPosition": {
+    "x": 200,
+    "y": 1060
+  },
+  "endPosition": {
+    "x": 1877,
+    "y": 676,
+    "width": 15,
+    "height": 15,
+    "color": {
+      "r": 0,
+      "g": 255,
+      "b": 0,
+      "a": 100
+    }
+  },
+  "walls": [
+    
+  ],
+  "enemies": [],
+  "gravityZones": [
+    {
+      "x": 0,
+      "y": 0,
+      "width": 1160,
+      "height": 340,
+      "gravity": 3,
+      "invisible": false,
+      "direction": "RIGHT",
+      "ignoreWalls": true,
+      "starDensity": 0.001,
+      "colorIntensity": 100
+    },
+    {
+      "x": 1160,
+      "y": 0,
+      "width": 760,
+      "height": 740,
+      "gravity": 0.6,
+      "invisible": false,
+      "direction": "DOWN",
+      "ignoreWalls": true,
+      "starDensity": 0.001,
+      "colorIntensity": 100
+    },
+    {
+      "x": 760,
+      "y": 740,
+      "width": 1160,
+      "height": 340,
+      "gravity": 3,
+      "invisible": false,
+      "direction": "LEFT",
+      "ignoreWalls": true,
+      "starDensity": 0.001,
+      "colorIntensity": 100
+    },
+    {
+      "x": 0,
+      "y": 340,
+      "width": 760,
+      "height": 740,
+      "gravity": 2,
+      "invisible": false,
+      "direction": "UP",
+      "ignoreWalls": true,
+      "starDensity": 0.001,
+      "colorIntensity": 100
+    }
+  ],
+  "spikes": [],
+  "labels": [
+    {
+      "x": 500,
+      "y": 525,
+      "text": "A black hole has ripped a hole in the fabric of space and time!!",
+      "textSize": 32,
+      "color": {
+        "r": 255,
+        "g": 157,
+        "b": 0
+      },
+      "outline": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 100
+      },
+      "outlineSize": 5,
+      "rainbow": true
+    }
+  ]
+}

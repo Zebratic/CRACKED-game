@@ -97,7 +97,7 @@
       "gravity": 2,
       "invisible": false,
       "direction": "down",
-      "ignoreWalls": false,
+      "ignoreWalls": true,
       "starDensity": 0.001,
       "colorIntensity": 255
     }

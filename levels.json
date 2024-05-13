@@ -10,10 +10,12 @@
         "walls"
     ],
     "hard": [
-        "saws"
+        "saws",
+        "blackhole"
     ],
     "tests": [
         "sandbox",
+        "exploits",
         "template"
     ]
 }

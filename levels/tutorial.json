@@ -1,6 +1,8 @@
 {
   "name": "Tutorial",
-  "allowedObjects": [],
+  "allowedObjects": [
+    ".*"
+  ],
   "startPosition": {
     "x": 50,
     "y": 680
