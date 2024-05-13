@@ -1,5 +1,3 @@
-
-
 class Player {
     constructor() {
         this.position = { x: 0, y: 0 };
@@ -8,13 +6,13 @@ class Player {
         this.height = 20;
         this.speed = 1.0;
         this.jumpStrength = 10;
-        this.gravity = 0.6; // Adjusted gravity for smoother jumping
-        this.friction = 0.8; // Adjusted friction for smoother sliding
+        this.gravity = 0.6;
+        this.friction = 0.8;
         this.isOnGround = false;
         this.isCrouched = false;
         this.crouchedHeight = (this.height / 4) * 3;
         this.originalHeight = this.height;
-        this.terminalVelocity = 15; // Terminal velocity to prevent indefinite acceleration
+        this.terminalVelocity = 15;
         this.blocked = false;
     }
 
@@ -173,8 +171,11 @@ class Player {
         stroke(0, 255, 0);
         line(center.x, center.y, center.x + this.velocity.x * 10, center.y + this.velocity.y * 10);
         noStroke();
-
     }
 }
 
 export default Player;
+
+
+
+

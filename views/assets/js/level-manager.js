@@ -29,7 +29,7 @@ class LevelManager {
 
             console.log(`Loaded level "${levelId}"`, level);
             const scriptResponse = await fetch(`levels/${levelId}.js`);
-            level.script = await scriptResponse.text();
+            level.script = await scriptResponse.text(); ''
             
             console.log(`Loaded script for level "${levelId}"`, level.script);
             this.currentLevel = level;
