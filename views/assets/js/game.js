@@ -5,7 +5,7 @@ import Enemy from './enemy.js';
 import GravityZone from './gravity-zone.js';
 import Spikes from './spikes.js';
 import Interpreter from './interpreter.js';
-import MusicPlayer from './musicplayer.js';
+import MusicPlayer from './music-player.js';
 import SpeedrunTimer from './speedrun-timer.js';
 import Label from './label.js';
 import EndPosition from './end-position.js';
