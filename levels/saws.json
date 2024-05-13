@@ -1,0 +1,97 @@
+{
+    "name": "Saws Everywhere",
+    "allowedObjects": [],
+    "startPosition": {
+        "x": 200,
+        "y": 1060
+    },
+    "endPosition": {
+        "x": 1476,
+        "y": 1050,
+        "width": 15,
+        "height": 15,
+        "color": { "r": 0, "g": 255, "b": 0, "a": 100 }
+    },
+    "walls": [],
+    "enemies": [
+        {
+            "type": "saw",
+            "x": 1340,
+            "y": 1060,
+            "size": 50,
+            "speed": 3,
+            "pathVisible": true,
+            "visible": true,
+            "coordinates": [
+                { "x": 1340, "y": 1060 },
+                { "x": 400, "y": 1060 }
+            ]
+        },
+        {
+            "type": "saw",
+            "x": 400,
+            "y": 1060,
+            "size": 50,
+            "speed": 3,
+            "pathVisible": true,
+            "visible": true,
+            "coordinates": [
+                { "x": 400, "y": 1060 },
+                { "x": 1340, "y": 1060 }
+            ]
+        },
+        {
+            "type": "saw",
+            "x": 900,
+            "y": 900,
+            "size": 50,
+            "speed": 2,
+            "pathVisible": true,
+            "visible": true,
+            "coordinates": [
+                { "x": 900, "y": 900 },
+                { "x": 1000, "y": 1060 },
+                { "x": 800, "y": 1060 }
+            ]
+        },
+        {
+            "type": "saw",
+            "x": 100,
+            "y": 100,
+            "size": 50,
+            "speed": 50,
+            "pathVisible": true,
+            "visible": true,
+            "coordinates": [
+                { "x": 100, "y": 100 },
+                { "x": 500, "y": 500 },
+                { "x": 800, "y": 300 },
+                { "x": 300, "y": 900 },
+                { "x": 1200, "y": 500 },
+                { "x": 1800, "y": 700 },
+                { "x": 1000, "y": 800 },
+                { "x": 100, "y": 500 },
+                { "x": 200, "y": 700 },
+                { "x": 1900, "y": 100 },
+                { "x": 1300, "y": 200 },
+                { "x": 1200, "y": 800 },
+                { "x": 800, "y": 400 },
+                { "x": 1500, "y": 100 },
+                { "x": 500, "y": 200 }
+            ]
+        }
+    ],
+    "gravityZones": [],
+    "spikes": [],
+    "labels": [
+        {
+            "x": 450,
+            "y": 500,
+            "text": "SAWS ARE NOW EVERYWHERE!!!",
+            "textSize": 64,
+            "outline": { "r": 0, "g": 0, "b": 0, "a": 100 },
+            "outlineSize": 5,
+            "rainbow": true
+        }
+    ]
+}

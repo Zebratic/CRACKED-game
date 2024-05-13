@@ -1,0 +1,21 @@
+{
+    "name": "Template",
+    "allowedObjects": [],
+    "startPosition": {
+        "x": 200,
+        "y": 1060
+    },
+    "endPosition": {
+        "x": 500,
+        "y": 1060,
+        "width": 15,
+        "height": 15
+    },
+    "walls": [],
+    "enemies": [],
+    "gravityZones": [],
+    "spikes": [],
+    "labels": []
+}
+
+

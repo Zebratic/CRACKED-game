@@ -10,8 +10,10 @@
         "walls"
     ],
     "hard": [
+        "saws"
     ],
     "tests": [
-        "sandbox"
+        "sandbox",
+        "template"
     ]
 }

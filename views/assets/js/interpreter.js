@@ -84,11 +84,6 @@ class Interpreter {
     }
 
     returnLevelScript(bjsScript) {
-
-        // use regex to replace values `${this.walls[0].collision}$` with actual values
-        // START: `${
-        // END: }$`
-        // only get whats inside the `${}$`
         bjsScript = bjsScript.replace(/`\$\{([^}`]+).*\}\$`/g, match => {
             match = match.replace('`${', '').replace('}$`', '');
             try {

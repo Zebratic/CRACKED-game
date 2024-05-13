@@ -9,7 +9,7 @@ class Enemy {
         this.visible = data.visible;
         this.coordinates = data.coordinates;
         this.targetCoordinate = 0;
-        this.color = { r: 255, g: 0, b: 0 };
+        this.color = data.color || { r: 255, g: 0, b: 0, a: 255 };
     }
 
     move() {
@@ -18,7 +18,7 @@ class Enemy {
         let dy = target.y - this.y;
         let distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < 1) {
+        if (distance < 1 * this.speed) {
             this.targetCoordinate++;
             if (this.targetCoordinate >= this.coordinates.length) {
                 this.targetCoordinate = 0;
@@ -28,6 +28,7 @@ class Enemy {
         let angle = Math.atan2(dy, dx);
         this.x += Math.cos(angle) * this.speed;
         this.y += Math.sin(angle) * this.speed;
+
     }
 
     draw(debugMode) {
