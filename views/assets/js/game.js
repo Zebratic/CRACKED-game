@@ -164,7 +164,15 @@ function draw() {
                 restartStopwatch = millis();
             }
             else
+            {
                 console.log('All levels completed');
+                levelManager.currentLevel = null;
+                levelManager.levelList = null;
+                levelManager.getLevelList().then(list => {
+                    levelManager.levelList = list;
+                    loadLevel(levelManager.levelList[0]);
+                });
+            }
         }
     }
 
