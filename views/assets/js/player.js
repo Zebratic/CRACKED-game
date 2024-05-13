@@ -11,6 +11,9 @@ class Player {
         this.gravity = 0.6; // Adjusted gravity for smoother jumping
         this.friction = 0.8; // Adjusted friction for smoother sliding
         this.isOnGround = false;
+        this.isCrouched = false;
+        this.crouchedHeight = this.height * 2 / 3;
+        this.originalHeight = this.height;
         this.terminalVelocity = 15; // Terminal velocity to prevent indefinite acceleration
         this.blocked = false;
     }
@@ -21,24 +24,46 @@ class Player {
             this.velocity.x -= this.speed;
         if (keyIsDown(RIGHT_ARROW) && !this.blocked)
             this.velocity.x += this.speed;
+
+
+        // Halve player height when crouching
+        if (keyIsDown(DOWN_ARROW) && !this.blocked) {
+            this.isCrouched = true;
+            this.height = this.crouchedHeight;
+
+            if (this.isOnGround)
+                this.position.y += this.originalHeight - this.height;
+        }
+        else {
+            this.isCrouched = false;
+            this.height = this.originalHeight;
+        }
     
         // Jumping
-        if (keyIsDown(UP_ARROW) && this.isOnGround && this.velocity.y >= 0 && !this.blocked) {
+        if (keyIsDown(UP_ARROW) && this.isOnGround && this.velocity.y >= 0 && !this.isCrouched && !this.blocked) {
             this.velocity.y = -this.jumpStrength;
             this.isOnGround = false;
         }
+
+ 
+        // if crouching apply .7 friction
+        if (this.isCrouched && this.isOnGround)
+            this.velocity.x *= 0.7;
     
         // Apply gravity
         this.velocity.y += this.gravity;
+        
         // Limit vertical velocity to terminal velocity
         this.velocity.y = constrain(this.velocity.y, -this.terminalVelocity, this.terminalVelocity);
-    
+
         // Apply friction
         this.velocity.x *= this.friction;
+
     
         // Update position
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
+        
     
         // Collide with walls
         this.collideWalls(walls);
@@ -55,6 +80,7 @@ class Player {
     }
 
     collideWalls(walls) {
+        let isOnGround = false;
         for (let wall of walls) {
             if (wall.collision && this.position.x + this.width > wall.x && this.position.x < wall.x + wall.width &&
                 this.position.y + this.height > wall.y && this.position.y < wall.y + wall.height) {
@@ -81,17 +107,8 @@ class Player {
                         this.position.y -= overlapY;
 
                     this.velocity.y = 0;
-                    this.isOnGround = dy < 0; // Check if colliding from the top
+                    isOnGround = dy < 0; // Check if colliding from the top
                 }
-            }
-        }
-        
-        // Check if player is on the ground
-        let isOnGround = false;
-        for (let wall of walls) {
-            if (wall.collision && this.position.x + this.width > wall.x && this.position.x < wall.x + wall.width && this.position.y + this.height === wall.y) {
-                isOnGround = true;
-                break;
             }
         }
         

@@ -6,9 +6,12 @@
     ],
     "medium": [
         "fastfeet",
-        "walls",
-        "gravityzones"
+        "gravityzones",
+        "walls"
     ],
     "hard": [
+    ],
+    "tests": [
+        "sandbox"
     ]
 }

@@ -1,1 +1,1 @@
-this.player.gravity = `${this.player.gravity}`;
+this.player.gravity = `${this.player.gravity}$`;

@@ -32,7 +32,6 @@
 
         editorHeader.addEventListener('mousedown', startDrag);
         editorHeader.addEventListener('mouseup', stopDrag);
-        editorHeader.addEventListener('mouseleave', stopDrag);
         window.addEventListener('mousemove', drag);
 
         function startDrag(event) {
@@ -58,22 +57,22 @@
             if (editorWindow.getAttribute('editor-hidden') === 'true') {
                 editorWindow.setAttribute('editor-hidden', 'false');
                 editorWindow.style.opacity = 0;
-                editorWindow.style.transition = 'opacity 0.5s';
+                editorWindow.style.transition = 'opacity 0.2s';
                 editorWindow.style.pointerEvents = 'auto'; // enable interaction with the editor
                 window.editor.focus(); // focus the editor
                 setTimeout(() => {
                     editorWindow.style.opacity = 1;
-                }, 100);
+                }, 200);
             } else {
                 editorWindow.style.opacity = 0;
                 editorWindow.style.pointerEvents = 'none'; // disable interaction with the editor
                 document.activeElement.blur();
                 setTimeout(() => {
                     editorWindow.setAttribute('editor-hidden', 'true');
-                }, 500);
+                }, 200);
             }
         }
-
+        
         require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs' }});
         require(["vs/editor/editor.main"], function () {
             window.editor = monaco.editor.create(document.getElementById('editor'), {
@@ -85,6 +84,12 @@
             editor.onDidChangeModelContent(() => {
                 gameCode = editor.getValue();
                 interpreter.load(gameCode);
+
+                // fix monaco editor size when editor window is resized
+                let resizeObserver = new ResizeObserver(function (mutations) {
+                    editor.layout();
+                });
+                resizeObserver.observe(editorWindow);
             });
         });
 

@@ -33,7 +33,7 @@ class Interpreter {
             // const, let, var variables also check for multi line declarations
             var variables = gameCode.match(/(?:const|let|var)\s+\w+\s*=\s*[^;]+;/gs) || [];
             var functions = gameCode.match(/function\s+\w+\s*\([^)]*\)\s*\{[^{}]*\}/g) || [];
-            var executableLines = gameCode.match(/[^{};]+;/g);
+            var executableLines = gameCode.match(/[^{};]+;/g) || [];
             console.log('Variables:', variables);
             console.log('Functions:', functions);
             console.log('Executable Lines:', executableLines);
@@ -84,15 +84,18 @@ class Interpreter {
 
     returnLevelScript(bjsScript) {
 
-        // use regex to replace values `${this.walls[0].collision}` with actual values
-        bjsScript = bjsScript.replace(/`\$\{([^}]+)\}`/g, (match) => {
-            var expression = match.slice(2, -1);
+        // use regex to replace values `${this.walls[0].collision}$` with actual values
+        // START: `${
+        // END: }$`
+        // only get whats inside the `${}$`
+        bjsScript = bjsScript.replace(/`\$\{([^}`]+).*\}\$`/g, match => {
+            match = match.replace('`${', '').replace('}$`', '');
             try {
-                console.log('Evaluating expression:', expression);
-                return eval(expression);
+                console.log('Evaluating expression:', match);
+                return eval(match);
             } catch (error) {
-                console.error(`Error evaluating expression "${expression}":`, error);
-                return `null /* Error evaluating expression "${expression}": ${error} */`;
+                console.error(`Error evaluating expression "${match}":`, error);
+                return `null /* Error evaluating expression "${match}": ${error} */`;
             }
         });
 

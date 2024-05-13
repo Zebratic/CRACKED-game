@@ -1,0 +1,88 @@
+{
+    "name": "The Sandbox",
+    "allowedObjects": [
+        ".*"
+    ],
+    "startPosition": {
+        "x": 444,
+        "y": 1060
+    },
+    "endPosition": {
+        "x": 1476,
+        "y": 1050,
+        "width": 15,
+        "height": 15,
+        "color": {
+            "r": 0,
+            "g": 255,
+            "b": 0,
+            "a": 100
+        }
+    },
+    "walls": [
+        {
+            "x": 860,
+            "y": 500,
+            "width": 200,
+            "height": 20,
+            "collision": true,
+            "color": {
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 255
+            }
+        },
+        {
+            "x": 380,
+            "y": 800,
+            "width": 200,
+            "height": 20,
+            "collision": true,
+            "color": {
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 255
+            }
+        },
+        {
+            "x": 1340,
+            "y": 800,
+            "width": 200,
+            "height": 20,
+            "collision": true,
+            "color": {
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 255
+            }
+        }
+    ],
+    "enemies": [],
+    "gravityZones": [],
+    "spikes": [],
+    "labels": [
+        {
+            "x": 600,
+            "y": 200,
+            "text": "Welcome to The Sandbox",
+            "textSize": 64,
+            "color": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 100
+            },
+            "outline": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 100
+            },
+            "outlineSize": 5,
+            "rainbow": true
+        }
+    ]
+}

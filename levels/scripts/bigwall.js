@@ -1,1 +1,1 @@
-this.walls[0].collision = `${this.walls[0].collision}`;
+this.walls[0].collision = `${this.walls[0].collision}$`;

@@ -1,1 +1,1 @@
-this.player.speed = `${this.player.speed}`;
+this.player.speed = `${this.player.speed}$`;

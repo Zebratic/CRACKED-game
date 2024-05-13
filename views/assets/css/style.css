@@ -4,13 +4,16 @@ html, body {
 
 #editorWindow {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 700px;
-    height: 500px;
+    height: 350px;
+    top: 5%;
+    left: calc(50% - 350px);
     margin: 15px;
-    box-shadow: 0 0 10px 5px #000000;
-    background-color: #1a202c;
+    border-radius: 5px;
+    box-shadow: 0px 0px 25px 20px rgba(0,0,0,0.75);
+    resize: both;
+    overflow: hidden;
+    background-color: #1e1e1e;
 }
 
 #editorHeader {
@@ -21,7 +24,10 @@ html, body {
 }
 
 #editor {
-    position: absolute;
     width: 100%;
-    height: calc(100% - 40px);
+    height: 100%;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background: none;
 }

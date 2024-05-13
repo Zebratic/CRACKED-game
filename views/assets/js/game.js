@@ -231,7 +231,6 @@ function draw() {
 
 // on key press R, reload the level
 window.addEventListener('keydown', function(event) {
-    console.log(event.key);
     var isEditorOpen = editorWindow.getAttribute('editor-hidden') === 'false';
 
     switch (event.key.toLowerCase()) {
