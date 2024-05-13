@@ -299,13 +299,11 @@ window.expand = function(prefix, object) {
     if (Array.isArray(object) && object.length === 0)
         return `${prefix} = [];`;
 
-
     // if object is an array, fix prefix to be an array
     if (Array.isArray(object)) {
         let stringArray = [];
         for (let i = 0; i < object.length; i++) {
             let result = expandDeeper(`${prefix}[${i}]`, object[i]);
-            // for each key in object, add to string array
             for (let key in result) {
                 let value = result[key];
                 if (typeof value === 'string') {
@@ -315,14 +313,12 @@ window.expand = function(prefix, object) {
             }
         }
 
-        console.log("ARRAY:", stringArray);
-
         return stringArray.join('\n');
     }
     else {
+        // if object is an object, fix prefix to be an object
         let stringArray = [];
         let result = expandDeeper(prefix, object);
-        // for each key in object, add to string array
         for (let key in result) {
             let value = result[key];
             if (typeof value === 'string') {
@@ -331,8 +327,6 @@ window.expand = function(prefix, object) {
             stringArray.push(`${key} = ${value};`);
         }
 
-        console.log("OBJECT:", stringArray);
-        
         return stringArray.join('\n');
     }
 }
