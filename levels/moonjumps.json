@@ -1,7 +1,7 @@
 {
   "name": "Moon Jumps",
   "allowedObjects": [
-    "this.player.gravity"
+    "this.player.jumpStrength"
   ],
   "startPosition": {
     "x": 50,
@@ -20,20 +20,7 @@
     }
   },
   "walls": [
-    {
-      "x": 0,
-      "y": 1000,
-      "width": 1920,
-      "height": 80,
-      "collision": true,
-      "color": {
-        "r": 100,
-        "g": 100,
-        "b": 100,
-        "a": 100
-      }
-    },
-    {
+   {
       "x": 0,
       "y": 700,
       "width": 200,
@@ -91,21 +78,22 @@
   "spikes": [
     {
       "x": 0,
-      "y": 950,
+      "y": 1030,
       "width": 1920,
       "height": 50
     }
   ],
   "labels": [
     {
-      "x": 13,
-      "y": 446,
-      "text": "There is no way you can jump high enough here.\nHint: Press 'ESC' to open the editor.",
+      "x": 40,
+      "y": 550,
+      "text": "There is no way you can jump high enough here!",
       "textSize": 28,
       "color": {
-        "r": 251,
+        "r": 0,
         "g": 0,
-        "b": 255
+        "b": 0,
+        "a": 100
       },
       "outline": {
         "r": 0,
@@ -115,6 +103,26 @@
       },
       "outlineSize": 5,
       "rainbow": true
+    },
+    {
+      "x": 140,
+      "y": 600,
+      "text": "Hint: Press 'ESC' to open the editor.",
+      "textSize": 24,
+      "color": {
+        "r": 70,
+        "g": 70,
+        "b": 70,
+        "a": 255
+      },
+      "outline": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 100
+      },
+      "outlineSize": 3,
+      "rainbow": false
     }
   ]
 }

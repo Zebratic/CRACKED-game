@@ -12,7 +12,7 @@ class Player {
         this.friction = 0.8; // Adjusted friction for smoother sliding
         this.isOnGround = false;
         this.isCrouched = false;
-        this.crouchedHeight = this.height * 2 / 3;
+        this.crouchedHeight = (this.height / 4) * 3;
         this.originalHeight = this.height;
         this.terminalVelocity = 15; // Terminal velocity to prevent indefinite acceleration
         this.blocked = false;
@@ -53,8 +53,9 @@ class Player {
         // Apply gravity
         this.velocity.y += this.gravity;
         
-        // Limit vertical velocity to terminal velocity
-        this.velocity.y = constrain(this.velocity.y, -this.terminalVelocity, this.terminalVelocity);
+        // Limit vertical velocity to terminal velocity, but only when velocity is positive (falling)
+        if (this.velocity.y > 0) 
+            this.velocity.y = constrain(this.velocity.y, 0, this.terminalVelocity);
 
         // Apply friction
         this.velocity.x *= this.friction;
@@ -117,6 +118,16 @@ class Player {
             isOnGround = true;
             this.position.y = height - this.height;
             this.velocity.y = 0;
+        }
+
+        // stop upward velocity if player hits ceiling
+        if (this.position.y <= 0) {
+            console.log('hit ceiling');
+            setTimeout(() => {
+                console.log('restat velocity');
+                this.position.y = 0;
+                this.velocity.y = 0;
+            }, 500);
         }
         
         // If player is not on the ground, disable jumping

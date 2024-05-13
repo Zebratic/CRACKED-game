@@ -266,5 +266,63 @@ window.setup = setup;
 window.draw = draw;
 window.p5 = p5;
 window.editor = editor;
-
 window.interpreter = interpreter;
+
+function expandDeeper(prefix, object) {
+    let result = {};
+    
+    for (let key in object) {
+        if (typeof object[key] === 'object') {
+            result = { ...result, ...expandDeeper(`${prefix}.${key}`, object[key]) };
+        } else {
+            result[`${prefix}.${key}`] = object[key];
+        }
+    }
+
+    return result;
+}
+
+window.expand = function(prefix, object) {
+    if (object === null || object === undefined)
+        return `${prefix} = null;`;
+
+    if (Array.isArray(object) && object.length === 0)
+        return `${prefix} = [];`;
+
+
+    // if object is an array, fix prefix to be an array
+    if (Array.isArray(object)) {
+        let stringArray = [];
+        for (let i = 0; i < object.length; i++) {
+            let result = expandDeeper(`${prefix}[${i}]`, object[i]);
+            // for each key in object, add to string array
+            for (let key in result) {
+                let value = result[key];
+                if (typeof value === 'string') {
+                    value = `"${value}"`;
+                }
+                stringArray.push(`${key} = ${value};`);
+            }
+        }
+
+        console.log("ARRAY:", stringArray);
+
+        return stringArray.join('\n');
+    }
+    else {
+        let stringArray = [];
+        let result = expandDeeper(prefix, object);
+        // for each key in object, add to string array
+        for (let key in result) {
+            let value = result[key];
+            if (typeof value === 'string') {
+                value = `"${value}"`;
+            }
+            stringArray.push(`${key} = ${value};`);
+        }
+
+        console.log("OBJECT:", stringArray);
+        
+        return stringArray.join('\n');
+    }
+}

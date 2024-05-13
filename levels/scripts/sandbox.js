@@ -2,18 +2,23 @@
 //  Anything written here will be executed!  //
 ///////////////////////////////////////////////
 
-// this.player.KEY = VALUE;
+// ========== [PLAYER] ==========
+`${expand("this.player", this.player)}$`
 
-`${Object.keys(this.player).map(key => `this.player.${key} = ${this.player[key]};`).join('\n')}$`
+// ========== [WALLS] ==========
+`${expand("this.walls", this.walls)}$`
 
+// ========== [ENEMIES] ==========
+`${expand("this.enemies", this.enemies)}$`
 
+// ========== [GRAVITY ZONES] ==========
+`${expand("this.gravityZones", this.gravityZones)}$`
 
+// ========== [SPIKES] ==========
+`${expand("this.spikes", this.spikes)}$`
 
-this.player;
-this.levelManager;
-this.walls;
-this.enemies;
-this.gravityZones;
-this.spikes;
-this.labels;
-this.endPosition;
+// ========== [LABELS] ==========
+`${expand("this.labels", this.labels)}$`
+
+// ========== [END POSITION] ==========
+`${expand("this.endPosition", this.endPosition)}$`

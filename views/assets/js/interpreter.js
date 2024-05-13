@@ -20,59 +20,43 @@ class Interpreter {
         ];
     }
 
-
     load(gameCode) {
         console.log('Updating objects');
 
         var allowedObjects = this.levelManager.currentLevel.allowedObjects;
 
         try {
-            var allowedCode = '';
-            allowedCode += this.libraries.map(lib => `var ${lib} = window.${lib};`).join('\n');
+            var allowedCode = this.libraries.map(lib => `var ${lib} = window.${lib};`).join('\n') + '\n';
+
+            // remove comments
+            gameCode = gameCode.replace(/\/\*[\s\S]*?\*\//g, '');
+            gameCode = gameCode.replace(/\/\/.*/g, '');
              
             // const, let, var variables also check for multi line declarations
             var variables = gameCode.match(/(?:const|let|var)\s+\w+\s*=\s*[^;]+;/gs) || [];
             var functions = gameCode.match(/function\s+\w+\s*\([^)]*\)\s*\{[^{}]*\}/g) || [];
-            var executableLines = gameCode.match(/[^{};]+;/g) || [];
-            console.log('Variables:', variables);
-            console.log('Functions:', functions);
-            console.log('Executable Lines:', executableLines);
 
-            // remove comments such as // and /* */
-            variables = variables.map(variable => variable.replace(/\/\/.*|\/\*[^]*?\*\//g, ''));
-            functions = functions.map(func => func.replace(/\/\/.*|\/\*[^]*?\*\//g, ''));
-            executableLines = executableLines.map(line => line.replace(/\/\/.*|\/\*[^]*?\*\//g, ''));
-            console.log('Variables after removing comments:', variables);
-            console.log('Functions after removing comments:', functions);
-            console.log('Executable Lines after removing comments:', executableLines);
-
-            // if any lines have single /* or */ then remove them
-            variables = variables.map(variable => variable.replace(/\/\*|\/\*/g, ''));
-            functions = functions.map(func => func.replace(/\/\*|\/\*/g, ''));
-            executableLines = executableLines.map(line => line.replace(/\/\*|\/\*/g, ''));
-            
-
+            // split by new line and remove empty lines
+            var executableLines = gameCode.split('\n').filter(line => line.trim() !== '');
 
             // go through executable lines and check if line matches allowed objects regex
             if (executableLines) {
                 executableLines = executableLines.filter(line => {
                     for (let object of allowedObjects) {
                         const objectRegex = new RegExp(`\\b${object}\\b`);
-                        if (objectRegex.test(line)) return true;
+                        if (objectRegex.test(line))
+                            return true;
                     }
                 });
             }
 
-            console.log('Executable Lines after filtering:', executableLines);
-
-            
 
             // add allowed code to allowedCode
             if (variables) allowedCode += variables.join('\n');
             if (functions) allowedCode += functions.join('\n');
             if (executableLines) allowedCode += executableLines.join('\n');
 
-            console.log('Executing allowed code:', allowedCode);
+            console.log('==== Executing Code ====', '\n' + allowedCode + '\n' + '==== End Code ====');
             eval(allowedCode);
 
             // delete variables again
